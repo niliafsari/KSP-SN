@@ -111,3 +111,4 @@ N2188-1.Q2.B.170223_1936.S.057837.061035N3413.0060.nh.fits
 v0: no aavso catalog
 v1: aavso catalog
 v2: aavso + no subtraction
+v3: with new subtraction (change normalization)

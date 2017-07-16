@@ -16,7 +16,8 @@ matplotlib.rcParams.update({'font.size': 18})
 
 
 files=['N2188-B_v1_edit.csv','N2188-V_v1_edit.csv','N2188-I_v1_edit.csv',
-       'N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv']
+       'N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv',
+       'N2188-B_v3_edit.csv']
 names=[]
 for fil in files:
     data = np.genfromtxt(current_path + '/phot_csv/'+fil, delimiter=',')
@@ -49,13 +50,15 @@ for fil in files:
             data_B = data
         elif fil == files[4]:
             data_V = data
-        else:
+        elif fil == files[5]:
             data_I = data
+        else:
+            data_B_v3 = data
 
 
-data_B_v1=data_I_v1
+data_B_v1=data_B_v1
 
-ax = plt.subplot(211)
+ax = plt.subplot(311)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==1))
@@ -91,17 +94,46 @@ ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 
 
 plt.axis([720,855,18,25])
-plt.xlabel('time [days]')
+#plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('With subtraction I mag')
+plt.title('Subtraction w/ old normalization B mag')
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()
 
-data_B_v1=data_I
+data_B_v1=data_B_v3
+data_B_v1[:,4]=data_B_v1[:,4]+365
+ax = plt.subplot(312)
+cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
+plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
+cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==1))
+plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='cyan',label='Chile',fmt='<')
+cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==2))
+plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='yellow',label='Australia',fmt='^')
+
+cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
+plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='grey', marker='.',label='lim S')
+cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==1))
+plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='cyan', marker='.',label='lim C')
+cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==2))
+plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='yellow', marker='.',label='lim A')
+
+x=np.arange(650,855,0.5)
+y=(1+np.cos(2*np.pi*(x-742.881)/29.5306))/2
+ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
+
+
+plt.axis([720,855,18,25])
+#plt.xlabel('time [days]')
+plt.ylabel('mag')
+plt.title('Subtraction w/ new normalization B mag')
+ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
+ax.invert_yaxis()
+
+data_B_v1=data_B
 data_V_v1=data_V
 data_I_v1=data_I
 
-ax = plt.subplot(212)
+ax = plt.subplot(313)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==1))
@@ -142,7 +174,8 @@ ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 plt.axis([720,855,18,25])
 plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('No subtraction I mag')
+plt.title('No subtraction B mag')
+#plt.tight_layout()
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()
 
