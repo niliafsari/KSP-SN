@@ -33,7 +33,7 @@ writer_V.writerow( ('Name','KSPtime','Location','index', 'time', 'RA', 'DEC','I'
 
 current_path=os.path.dirname(os.path.abspath(__file__))
 files_path='/home/afsari/N2188/Q2'
-outext='.nh.newsub_magcalc.cat'
+outext='.nh.nosub_magcalc.cat'
 os.chdir(files_path)
 filename='N2188-1.Q2.*.*.*.*.061035N3413.0060'+outext
 bands={'B':0,'I':1,'V':2}
@@ -57,19 +57,22 @@ for f in files:
         flag=0
         continue
     else:
+        c=0
         with open(f) as fil:
-            for line in fil:
-                if 'full width half maximum:' in line:
-                    l=line.split(' ')
-                    FWHM=float(l[4])
-                elif 'optimal at aperture:' in line:
-                    l=line.split(' ')
-                    r_opt=float(l[3].replace('FWHM',''))
-                elif 'Contribution of intrinsic error:' in line:
-                    l=line.split(' ')
+            lines = fil.readlines()
+            for c in xrange(0,len(lines)):
+                if 'Contribution of intrinsic error:' in lines[c]:
+                    fil.readline()
+                    l=lines[c].split(' ')
                     Io_err=float(l[4])
-                elif 'Contribution of ref star scatter:' in line:
-                    l = line.split(' ')
+                    temp=lines[c-4].split(' ')
+                    print temp
+                    FWHM = float(temp[4])
+                    print FWHM
+                    temp=lines[c-3].split(' ')
+                    r_opt=float(temp[3].replace('FWHM',''))
+                elif 'Contribution of ref star scatter:' in lines[c]:
+                    l = lines[c].split(' ')
                     I_rand = float(l[5])
         info = f.split('.')
         names.append(f)

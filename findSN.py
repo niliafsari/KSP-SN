@@ -11,7 +11,8 @@ def findSN(filename,verbosity=0, directory='/home/afsari/PycharmProjects/kspSN/c
     files_path = '/home/afsari/N2188/Q2'
     os.chdir(files_path)
     filename_raw =  filename
-    filename = filename.replace('fits','REF-SUB.fits')
+    diffext='REF-SUB_v1.fits'
+    filename = filename.replace('fits',diffext)
     info = filename.split('.')
 
     plt.subplot(1, 2, 1)

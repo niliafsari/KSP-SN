@@ -30,5 +30,5 @@ for i in xrange(0,len(bands)):
         run_command = 'python ~/SNAP/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + bands[
             i] + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -v -n 3.0 -s 14.0 -f 18.5 ' + file_original + ' '+'-d'+' '+files[j]+ ' ' + file_phot + ' > ' + file_output
         #print run_command
-        os.system(run_command)
+        #os.system(run_command)
 

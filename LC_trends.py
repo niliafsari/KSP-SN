@@ -15,9 +15,11 @@ current_path=os.path.dirname(os.path.abspath(__file__))
 matplotlib.rcParams.update({'font.size': 18})
 
 
+band='V'
+
 files=['N2188-B_v1_edit.csv','N2188-V_v1_edit.csv','N2188-I_v1_edit.csv',
        'N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv',
-       'N2188-B_v3_edit.csv']
+       'N2188-B_v3_edit.csv','N2188-V_v3_edit.csv','N2188-I_v3_edit.csv']
 names=[]
 for fil in files:
     data = np.genfromtxt(current_path + '/phot_csv/'+fil, delimiter=',')
@@ -52,12 +54,21 @@ for fil in files:
             data_V = data
         elif fil == files[5]:
             data_I = data
-        else:
+        elif fil == files[6]:
             data_B_v3 = data
+        elif fil == files[7]:
+            data_V_v3 = data
+        elif fil == files[8]:
+            data_I_v3 = data
 
-
-data_B_v1=data_B_v1
-
+if band=='B':
+    data_B_v1=data_B_v1
+elif band=='V':
+    data_B_v1=data_V_v1
+elif band == 'I':
+    data_B_v1 = data_I_v1
+else:
+    print "band doesn't exist"
 ax = plt.subplot(311)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
@@ -96,11 +107,18 @@ ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 plt.axis([720,855,18,25])
 #plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('Subtraction w/ old normalization B mag')
+plt.title('Subtraction w/ old normalization '+band+' mag')
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()
 
-data_B_v1=data_B_v3
+if band=='B':
+    data_B_v1=data_B_v3
+elif band=='V':
+    data_B_v1=data_V_v3
+elif band == 'I':
+    data_B_v1 = data_I_v3
+else:
+    print "band doesn't exist"
 data_B_v1[:,4]=data_B_v1[:,4]+365
 ax = plt.subplot(312)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
@@ -125,13 +143,18 @@ ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 plt.axis([720,855,18,25])
 #plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('Subtraction w/ new normalization B mag')
+plt.title('Subtraction w/ new normalization '+band+' mag')
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()
 
-data_B_v1=data_B
-data_V_v1=data_V
-data_I_v1=data_I
+if band=='B':
+    data_B_v1=data_B
+elif band=='V':
+    data_B_v1=data_V
+elif band == 'I':
+    data_B_v1 = data_I
+else:
+    print "band doesn't exist"
 
 ax = plt.subplot(313)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
@@ -174,7 +197,7 @@ ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 plt.axis([720,855,18,25])
 plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('No subtraction B mag')
+plt.title('No subtraction'+band+' mag')
 #plt.tight_layout()
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()

@@ -66,12 +66,16 @@ for f in files:
             if info[2]=='B':
                 writer_B.writerow((names[i].replace(outext,'.nh.fits'),timeksp,location,i,time,RA, DEC,I, SN, M, Merr, Mlim))
             elif info[2]=='I':
+                #if (time> 379.0 and  time<380.0):
+                #    findSN(names[i].replace(outext,'.nh.fits'),1,'/home/afsari/PycharmProjects/kspSN/corrupted/varhigh/')
                 writer_I.writerow((names[i].replace(outext,'.nh.fits'),timeksp,location,i,time,RA, DEC,I, SN, M, Merr, Mlim))
             else:
+                if (time> 374.0 and  time<381.0):
+                    findSN(names[i].replace(outext,'.nh.fits'),1,'/home/afsari/PycharmProjects/kspSN/corrupted/varhighV/')
                 writer_V.writerow((names[i].replace(outext,'.nh.fits'),timeksp,location,i,time,RA, DEC,I, SN, M, Merr, Mlim))
             i=i+1
         else:
-            #print f, last_line
+            print f, last_line
             #dophot(f.replace(outext,'.nh.fits'),1,1)
 
 f_B.close()
