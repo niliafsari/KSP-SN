@@ -112,3 +112,5 @@ v0: no aavso catalog
 v1: aavso catalog
 v2: aavso + no subtraction
 v3: with new subtraction (change normalization)
+v4: relax psf
+v5: relax psf + subtract with more subimages

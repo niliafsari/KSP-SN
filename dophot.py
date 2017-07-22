@@ -5,13 +5,16 @@ import matplotlib.pyplot as plt
 
 def dophot(filename,verbosity=0, output=0):
     files_path = '/home/afsari/N2188/Q2'
+    diffext='.nh.REF-SUB_v2.fits'
+    outext = '.nh.relaxpsf_magcalc.cat'
     os.chdir(files_path)
     info = filename.split('.')
     band=info[2]
-    files_sub=filename.replace('.nh.fits','.nh.REF-SUB.fits')
+    files_sub=filename.replace('.nh.fits',diffext)
+    print files_sub
     file_phot='temp.cat'
     #file_phot='N2188-1.Q2.V.170430_0926.A.056477.061035N3413.0060_tan.nh.phot.apass.csv'
-    file_output=filename.replace('.nh.fits','.nh.aavso_magcalc.cat')
+    file_output=filename.replace('.nh.fits',outext)
     if output==1:
         file_output=' > ' +file_output
     else:

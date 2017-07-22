@@ -15,9 +15,9 @@ current_path=os.path.dirname(os.path.abspath(__file__))
 matplotlib.rcParams.update({'font.size': 18})
 
 
-band='V'
+band='B'
 
-files=['N2188-B_v1_edit.csv','N2188-V_v1_edit.csv','N2188-I_v1_edit.csv',
+files=['N2188-B_v4_edit.csv','N2188-V_v4_edit.csv','N2188-I_v4_edit.csv',
        'N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv',
        'N2188-B_v3_edit.csv','N2188-V_v3_edit.csv','N2188-I_v3_edit.csv']
 names=[]
@@ -69,6 +69,7 @@ elif band == 'I':
     data_B_v1 = data_I_v1
 else:
     print "band doesn't exist"
+data_B_v1[:,4]=data_B_v1[:,4]+365
 ax = plt.subplot(311)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')

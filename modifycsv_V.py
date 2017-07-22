@@ -3,8 +3,8 @@ import csv
 from astropy.time import Time
 from moon import *
 
-in_filename='N2188-V_v3.csv'
-out_filename="N2188-V_v3_edit.csv"
+in_filename='N2188-V_v4.csv'
+out_filename="N2188-V_v4_edit.csv"
 my_file = open('phot_csv/'+in_filename, 'r')
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)

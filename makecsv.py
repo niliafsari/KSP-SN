@@ -17,9 +17,9 @@ def is_number(s):
     except ValueError:
         return False
 
-f_B = open('phot_csv/N2188-B_v3.csv', 'w')
-f_I = open('phot_csv/N2188-I_v3.csv', 'w')
-f_V = open('phot_csv/N2188-V_v3.csv', 'w')
+f_B = open('phot_csv/N2188-B_v5.csv', 'w')
+f_I = open('phot_csv/N2188-I_v5.csv', 'w')
+f_V = open('phot_csv/N2188-V_v5.csv', 'w')
 
 writer_B = csv.writer(f_B)
 writer_B.writerow( ('Name','KSPtime','Location','index', 'time', 'RA', 'DEC','I', 'SN', 'M', 'Merr', 'Mlim' ))
@@ -33,7 +33,7 @@ writer_V.writerow( ('Name','KSPtime','Location','index', 'time', 'RA', 'DEC','I'
 
 current_path=os.path.dirname(os.path.abspath(__file__))
 files_path='/home/afsari/N2188/Q2'
-outext='.nh.newsub_magcalc.cat'
+outext='.nh.relaxpsfnewsub_magcalc.cat'
 os.chdir(files_path)
 filename='N2188-1.Q2.*.*.*.*.061035N3413.0060'+outext
 bands={'B':0,'I':1,'V':2}
@@ -50,7 +50,7 @@ for f in files:
             print f, line,j
             j=j+1
             #findSN(f.replace('.nh.magcalc.cat', '.nh.fits'), 1, '/home/afsari/PycharmProjects/kspSN/corrupted/cantopen/')
-            #dophot(f.replace('nh.magcalc.cat','nh.fits'),0,1)
+            #dophot(f.replace(outext,'.nh.fits'),1,1)
             flag=1
             break
     if flag==1:
@@ -66,17 +66,17 @@ for f in files:
             if info[2]=='B':
                 writer_B.writerow((names[i].replace(outext,'.nh.fits'),timeksp,location,i,time,RA, DEC,I, SN, M, Merr, Mlim))
             elif info[2]=='I':
-                #if (time> 379.0 and  time<380.0):
-                #    findSN(names[i].replace(outext,'.nh.fits'),1,'/home/afsari/PycharmProjects/kspSN/corrupted/varhigh/')
+                if (time> 358.0 and  time<363.0):
+                    findSN(names[i].replace(outext,'.nh.fits'),1,'/home/afsari/PycharmProjects/kspSN/corrupted/earlyI/')
                 writer_I.writerow((names[i].replace(outext,'.nh.fits'),timeksp,location,i,time,RA, DEC,I, SN, M, Merr, Mlim))
             else:
-                if (time> 374.0 and  time<381.0):
-                    findSN(names[i].replace(outext,'.nh.fits'),1,'/home/afsari/PycharmProjects/kspSN/corrupted/varhighV/')
+                #if (time> 374.0 and  time<381.0):
+                #    findSN(names[i].replace(outext,'.nh.fits'),1,'/home/afsari/PycharmProjects/kspSN/corrupted/varhighV/')
                 writer_V.writerow((names[i].replace(outext,'.nh.fits'),timeksp,location,i,time,RA, DEC,I, SN, M, Merr, Mlim))
             i=i+1
         else:
             print f, last_line
-            #dophot(f.replace(outext,'.nh.fits'),1,1)
+            dophot(f.replace(outext,'.nh.fits'),1,1)
 
 f_B.close()
 f_V.close()

@@ -11,7 +11,7 @@ def findSN(filename,verbosity=0, directory='/home/afsari/PycharmProjects/kspSN/c
     files_path = '/home/afsari/N2188/Q2'
     os.chdir(files_path)
     filename_raw =  filename
-    diffext='REF-SUB_v1.fits'
+    diffext='REF-SUB_v2.fits'
     filename = filename.replace('fits',diffext)
     info = filename.split('.')
 
@@ -32,7 +32,7 @@ def findSN(filename,verbosity=0, directory='/home/afsari/PycharmProjects/kspSN/c
     dat = image.T[Xo - r:Xo + r, Yo - r:Yo + r]
     #print np.max(dat)
     plt.pcolormesh(x, y, image.T[Xo - r:Xo + r, Yo - r:Yo + r],
-                   cmap='gray_r', vmax=300, vmin=0)
+                   cmap='gray_r', vmax=300, vmin=-40)
     plt.axis([Xo - r, Xo + r, Yo - r, Yo + r])
     plt.gca().set_aspect('equal', adjustable='box')
 
@@ -50,7 +50,7 @@ def findSN(filename,verbosity=0, directory='/home/afsari/PycharmProjects/kspSN/c
     X = np.linspace(Xo - r, Xo + r, 2 * r)
     y, x = np.meshgrid(Y, X)
     plt.pcolormesh(x, y, image.T[Xo - r:Xo + r, Yo - r:Yo + r],
-                   cmap='gray_r', vmax=300, vmin=0)
+                   cmap='gray_r', vmax=300, vmin=-40)
     plt.axis([Xo - r, Xo + r, Yo - r, Yo + r])
     plt.gca().set_aspect('equal', adjustable='box')
 

@@ -17,9 +17,9 @@ def is_number(s):
     except ValueError:
         return False
 
-f_B = open('phot_csv/N2188metadata-B_v3.csv', 'w')
-f_I = open('phot_csv/N2188metadata-I_v3.csv', 'w')
-f_V = open('phot_csv/N2188metadata-V_v3.csv', 'w')
+f_B = open('phot_csv/N2188metadata-B_v4.csv', 'w')
+f_I = open('phot_csv/N2188metadata-I_v4.csv', 'w')
+f_V = open('phot_csv/N2188metadata-V_v4.csv', 'w')
 
 writer_B = csv.writer(f_B)
 writer_B.writerow( ('Name','KSPtime','Location','index', 'time', 'RA', 'DEC','I', 'SN', 'M', 'Merr', 'Mlim','FWHM','r_opt','Io_err','I_rand' ))
@@ -33,7 +33,7 @@ writer_V.writerow( ('Name','KSPtime','Location','index', 'time', 'RA', 'DEC','I'
 
 current_path=os.path.dirname(os.path.abspath(__file__))
 files_path='/home/afsari/N2188/Q2'
-outext='.nh.nosub_magcalc.cat'
+outext='.nh.relaxpsf_magcalc.cat'
 os.chdir(files_path)
 filename='N2188-1.Q2.*.*.*.*.061035N3413.0060'+outext
 bands={'B':0,'I':1,'V':2}
