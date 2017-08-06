@@ -31,8 +31,8 @@ def diffSN(verbosity=0, band='B'):
     print len(files)
     for f in files:
         run_command='python ~/SNAP/DiffIm.py '+f+' '+REF_images[bands[band]]+' '+ f.replace('.nh.fits',outext)
-        print run_command
-        os.system(run_command)
+        #print run_command
+        #os.system(run_command)
 
 if __name__ == "__main__":
     import argparse

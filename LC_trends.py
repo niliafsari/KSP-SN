@@ -17,9 +17,9 @@ matplotlib.rcParams.update({'font.size': 18})
 
 band='B'
 
-files=['N2188-B_v4_edit.csv','N2188-V_v4_edit.csv','N2188-I_v4_edit.csv',
-       'N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv',
-       'N2188-B_v3_edit.csv','N2188-V_v3_edit.csv','N2188-I_v3_edit.csv']
+files=['N2188-I_v5_edit.csv','N2188-V_v4_edit.csv','N2188-I_v3_edit.csv',
+       'N2188-B_v5_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv',
+       'N2188-V_v5_edit.csv','N2188-V_v5_edit.csv','N2188-I_v5_edit.csv']
 names=[]
 for fil in files:
     data = np.genfromtxt(current_path + '/phot_csv/'+fil, delimiter=',')
@@ -69,7 +69,7 @@ elif band == 'I':
     data_B_v1 = data_I_v1
 else:
     print "band doesn't exist"
-data_B_v1[:,4]=data_B_v1[:,4]+365
+#data_B_v1[:,4]=data_B_v1[:,4]+365
 ax = plt.subplot(311)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
@@ -100,15 +100,15 @@ plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='yellow', marker='.
 # plt.errorbar(data_I_v1[:,4][cond],data_I_v1[:,9][cond],yerr=data_I_v1[:,10][cond],color='red',label='I Australia ',fmt='^')
 # # #plt.scatter(data_I_v1[:,4][(data_I_v1[:,9] > data_I_v1[:,11])& (data_I_v1[:,4]<723.5)],data_I_v1[:,11][(data_I_v1[:,9] > data_I_v1[:,11])& (data_I_v1[:,4]<723.5)],color='red', marker='D',label='V no detection')
 # plt.scatter(data_I_v1[:,4],data_I_v1[:,11],color='lightpink', marker='.',label='V lim')
-x=np.arange(650,855,0.5)
-y=(1+np.cos(2*np.pi*(x-742.881)/29.5306))/2
+x=np.arange(650-365,855-365,0.5)
+y=(1+np.cos(2*np.pi*(x-742.881+365)/29.5306))/2
 ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 
 
-plt.axis([720,855,18,25])
+plt.axis([720-365,855-365,18,25])
 #plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('Subtraction w/ old normalization '+band+' mag')
+plt.title('I mag')
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()
 
@@ -120,7 +120,7 @@ elif band == 'I':
     data_B_v1 = data_I_v3
 else:
     print "band doesn't exist"
-data_B_v1[:,4]=data_B_v1[:,4]+365
+#data_B_v1[:,4]=data_B_v1[:,4]+365
 ax = plt.subplot(312)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
@@ -136,15 +136,15 @@ plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='cyan', marker='.',
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==2))
 plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='yellow', marker='.',label='lim A')
 
-x=np.arange(650,855,0.5)
-y=(1+np.cos(2*np.pi*(x-742.881)/29.5306))/2
+x=np.arange(650-365,855-365,0.5)
+y=(1+np.cos(2*np.pi*(x-742.881+365)/29.5306))/2
 ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 
 
-plt.axis([720,855,18,25])
+plt.axis([720-365,855-365,18,25])
 #plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('Subtraction w/ new normalization '+band+' mag')
+plt.title('V mag')
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()
 
@@ -156,7 +156,7 @@ elif band == 'I':
     data_B_v1 = data_I
 else:
     print "band doesn't exist"
-
+data_B_v1[:,4]=data_B_v1[:,4]
 ax = plt.subplot(313)
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
@@ -191,14 +191,14 @@ plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='yellow', marker='.
 # plt.errorbar(data_I_v1[:,4][cond],data_I_v1[:,9][cond],yerr=data_I_v1[:,10][cond],color='red',label='I Australia ',fmt='^')
 # # #plt.scatter(data_I_v1[:,4][(data_I_v1[:,9] > data_I_v1[:,11])& (data_I_v1[:,4]<723.5)],data_I_v1[:,11][(data_I_v1[:,9] > data_I_v1[:,11])& (data_I_v1[:,4]<723.5)],color='red', marker='D',label='V no detection')
 # plt.scatter(data_I_v1[:,4],data_I_v1[:,11],color='lightpink', marker='.',label='V lim')
-x=np.arange(650,855,0.5)
-y=(1+np.cos(2*np.pi*(x-742.881)/29.5306))/2
+x=np.arange(650-365,855-365,0.5)
+y=(1+np.cos(2*np.pi*(x-742.881+365)/29.5306))/2
 ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 
-plt.axis([720,855,18,25])
+plt.axis([720-365,855-365,18,25])
 plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('No subtraction'+band+' mag')
+plt.title('B mag')
 #plt.tight_layout()
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()

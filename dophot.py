@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 def dophot(filename,verbosity=0, output=0):
     files_path = '/home/afsari/N2188/Q2'
-    diffext='.nh.REF-SUB_v2.fits'
-    outext = '.nh.relaxpsf_magcalc.cat'
+    diffext='.nh.REF-SUB_v1.fits'
+    outext = '.nh.relaxpsfnewsub_magcalc.cat'
     os.chdir(files_path)
     info = filename.split('.')
     band=info[2]

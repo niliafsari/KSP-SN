@@ -14,9 +14,9 @@ import csv
 current_path=os.path.dirname(os.path.abspath(__file__))
 matplotlib.rcParams.update({'font.size': 18})
 
-data_B = np.genfromtxt(current_path+ '/phot_csv/N2188-B_v2_edit.csv', delimiter=',')
-data_V = np.genfromtxt(current_path+'/phot_csv/N2188-V_v2_edit.csv', delimiter=',')
-data_I = np.genfromtxt(current_path+'/phot_csv/N2188-I_v2_edit.csv', delimiter=',')
+data_B = np.genfromtxt(current_path+ '/phot_csv/N2188-B_v5_edit.csv', delimiter=',')
+data_V = np.genfromtxt(current_path+'/phot_csv/N2188-V_v5_edit.csv', delimiter=',')
+data_I = np.genfromtxt(current_path+'/phot_csv/N2188-I_v5_edit.csv', delimiter=',')
 
 # files=['N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv']
 # names=[]
@@ -45,7 +45,7 @@ plt.errorbar(data_V[:,4][(data_V[:,9] < data_V[:,11])],data_V[:,9][(data_V[:,9] 
 plt.scatter(data_V[:,4][(data_V[:,9] > data_V[:,11])& (data_V[:,4]<723.5)],data_V[:,11][(data_V[:,9] > data_V[:,11])& (data_V[:,4]<723.5)],color='green', marker='D',label='V no detection')
 plt.errorbar(data_I[:,4][(data_I[:,9] < data_I[:,11])],data_I[:,9][(data_I[:,9] < data_I[:,11])],yerr=data_I[:,10][(data_I[:,9] < data_I[:,11])],color='red',label='V',fmt='o')
 plt.scatter(data_I[:,4][(data_I[:,9] > data_I[:,11])& (data_I[:,4]<723.5)],data_I[:,11][(data_I[:,9] > data_I[:,11])& (data_I[:,4]<723.5)],color='red', marker='D',label='V no detection')
-plt.axis([650,855,18,25])
+plt.axis([650-365,855-365,18,25])
 plt.xlabel('time [days]')
 plt.ylabel('mag')
 ax.legend(loc='best',ncol=3, fancybox=True,fontsize=12)
@@ -60,8 +60,8 @@ plt.scatter(data_V[:,4],data_V[:,11],color='lightgreen', marker='.',label='V lim
 plt.scatter(data_I[:,4],data_I[:,9],color='red',label='V ',marker='o')
 plt.scatter(data_I[:,4],data_I[:,11],color='lightpink', marker='.',label='V lim')
 
-x=np.arange(650,855,0.5)
-y=(1+np.cos(2*np.pi*(x-742.881)/29.5306))/2
+x=np.arange(650-365,855-365,0.5)
+y=(1+np.cos(2*np.pi*(x-742.881+365)/29.5306))/2
 ax.fill_between(x, 15,27, where= (y>0.8), facecolor='silver',alpha=0.5)
 
 
@@ -87,7 +87,7 @@ ax = plt.subplot(313)
 plt.errorbar(data_B[:,4][(data_B[:,9] < data_B[:,11])],data_B[:,13][(data_B[:,9] < data_B[:,11])],yerr=data_B[:,14][(data_B[:,9] < data_B[:,11])],color='blue',label='B mag',fmt='o')
 plt.errorbar(data_V[:,4][(data_V[:,9] < data_V[:,11])],data_V[:,13][(data_V[:,9] < data_V[:,11])],yerr=data_V[:,14][(data_V[:,9] < data_V[:,11])],color='green',label='V mag',fmt='o')
 plt.errorbar(data_I[:,4][(data_I[:,9] < data_I[:,11])],data_I[:,13][(data_I[:,9] < data_I[:,11])],yerr=data_I[:,14][(data_I[:,9] < data_I[:,11])],color='red',label='V mag',fmt='o')
-plt.axis([720,860,-18,-14])
+plt.axis([720-365,860-365,-18,-14])
 plt.gca().invert_yaxis()
 plt.xlabel('time [days]')
 plt.ylabel('Absolute Mag')

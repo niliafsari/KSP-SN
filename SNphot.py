@@ -8,9 +8,9 @@ import glob
 current_path=os.path.dirname(os.path.abspath(__file__))
 files_path='../../N2188/Q2'
 os.chdir(files_path)
-bands={0:'B'}
-outext='.nh.newsky_magcalc.cat'
-subext='.nh.REF-SUB_v1.fits'
+bands={0:'B',1:'I',2:'V'}
+outext='.nh.relaxpsfnewsub_magcalc.cat'
+subext='.nh.REF-SUB_v2.fits'
 for i in xrange(0,len(bands)):
     filename_format = 'N2188-1.Q2.'+bands[i]+'.*.*.*.061035N3413.0060'+subext
     filename_done='N2188-1.Q2.'+bands[i]+'.*.*.*.061035N3413.0060'+outext
