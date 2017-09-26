@@ -3,8 +3,8 @@ import csv
 from astropy.time import Time
 from moon import *
 
-in_filename='N2188-I_v5.csv'
-out_filename="N2188-I_v5_edit.csv"
+in_filename='N2188-I_v10.csv'
+out_filename="N2188-I_v10_edit.csv"
 my_file = open('phot_csv/'+in_filename, 'r')
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)
@@ -42,16 +42,22 @@ for l in data_list_v2:
         l[2] = 0
 
 torem=[]
+# for i, index in enumerate(data[:,3]):
+#     I=data[i,7]
+#     I_err=I/data[i,8]
+#     try:
+#         I_orig=mydict4_v2[mydict1[str(int(index))]]
+#     except:
+#         continue
+#     I_orig_err=I_orig/mydict5_v2[mydict1[str(int(index))]]
+#     if ((I-1.3*I_err)>(I_orig+I_orig_err) and data[i,4]>366) or (data[i,4]<357 and data[i,9]<data[i,11]):
+#         torem.append(mydict1[str(int(index))])
+
 for i, index in enumerate(data[:,3]):
     I=data[i,7]
-    I_err=I/data[i,8]
-    try:
-        I_orig=mydict4_v2[mydict1[str(int(index))]]
-    except:
-        continue
-    I_orig_err=I_orig/mydict5_v2[mydict1[str(int(index))]]
-    if (I)>(I_orig+I_orig_err) and data[i,4]>366:
+    if (data[i,4]>492 or data[i,9]<18.4 or data[i,4]<358 or (data[i,4]>393 and data[i,4]<421 and data[i,9]>18.95)):
         torem.append(mydict1[str(int(index))])
+print len(torem)
 rem=['N2188-1.Q2.I.170111_0432.C.048618.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.I.170113_0347.C.049081.061035N3413.0060.nh.fits'
 ,'N2188-1.Q2.I.170109_0642.C.048192.061035N3413.0060.nh.fits'
@@ -60,7 +66,24 @@ rem=['N2188-1.Q2.I.170111_0432.C.048618.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.I.170330_0948.A.051074.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.I.170430_0928.A.056478.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.I.170309_1101.A.048451.061035N3413.0060.nh.fits'
-     ,'N2188-1.Q2.I.170417_1812.S.004972.061035N3413.0060.nh.fits']
+     ,'N2188-1.Q2.I.170417_1812.S.004972.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170111_0643.C.048678.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170219_1040.A.045191.061035N3413.0060.nh.fits'
+    ,'N2188-1.Q2.I.170219_1405.A.045283.061035N3413.0060.nh.fits'
+,'N2188-1.Q2.I.170218_1152.A.044955.061035N3413.0060.nh.fits'
+,'N2188-1.Q2.I.170218_1416.A.045021.061035N3413.0060.nh.fits'
+,'N2188-1.Q2.I.170218_1301.A.044986.061035N3413.0060.nh.fits'
+,'N2188-1.Q2.I.170218_1048.A.044925.061035N3413.0060.nh.fits'
+,'N2188-1.Q2.I.170219_1147.A.045221.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170115_1933.S.050843.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170212_1200.A.044538.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170116_2035.S.050941.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170110_0321.C.048343.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170202_2028.S.054319.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170123_0247.C.051299.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170408_0030.C.003056.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170412_1909.S.003935.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.I.170505_0005.C.009863.061035N3413.0060.nh.fits']
 
 torem=torem+rem
 for file in torem:

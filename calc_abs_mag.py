@@ -1,8 +1,10 @@
 import numpy as np
-from SNAP.Analysis import *
+import sys
+sys.path.insert(0, '/home/afsari/')
+from SNAP2.Analysis import *
 import csv
 
-file_name="phot_csv/N2188-I_v2_edit.csv"
+file_name="phot_csv/N2188-V_v10_edit.csv"
 my_file = open(file_name, 'r')
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)
@@ -25,7 +27,7 @@ for i in xrange(0,data.shape[0]):
 
 print abs_mag.shape
 
-data=np.append(data, abs_mag, axis=1)
+data=np.append(data[:,0:12], abs_mag, axis=1)
 
 print data.shape
 

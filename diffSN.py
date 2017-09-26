@@ -20,17 +20,21 @@ def diffSN(verbosity=0, band='B'):
     'REF_Images/N2188-1.Q2.I.161023_1622-161025_0820.XCXA.061035N3413.00005.00005.FM40.BS0512.coadd.REF.fits',
     'REF_Images/N2188-1.Q2.V.161023_1729-161025_0818.XCXA.061035N3413.00005.00005.FM43.BS0512.coadd.REF.fits']
 
-    filename_format = 'N2188-1.Q2.'+band+'.*.*.*.061035N3413.0060.nh.fits'
+    filename_format = 'N2188-1.Q2.'+band+'.*.*.*.061035N3413.0060.nh.fits.fz'
     filename_done='N2188-1.Q2.'+band+'.*.*.*.061035N3413.0060'+outext
     files=glob.glob(filename_format)
     files_done = glob.glob(filename_done)
-    files_done = [w.replace(outext, '.nh.fits') for w in files_done]
+    files_done = [w.replace(outext, '.nh.fits.fz') for w in files_done]
     print len(files_done)
     print len(files)
     files= list(set(files) - set(files_done))
     print len(files)
     for f in files:
-        run_command='python ~/SNAP/DiffIm.py '+f+' '+REF_images[bands[band]]+' '+ f.replace('.nh.fits',outext)
+        run_command='funpack -O '+f.replace('.fz','')+' '+f
+        #os.system(run_command)
+        #print run_command
+        #os.system(run_command)
+        run_command='python ~/SNAP2/DiffIm.py '+f.replace('.fz','')+' '+REF_images[bands[band]]+' '+ f.replace('.nh.fits.fz',outext)
         #print run_command
         #os.system(run_command)
 
