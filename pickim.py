@@ -1,10 +1,9 @@
 from astropy.io import fits
 from astropy.wcs import WCS
 import numpy as np
-import matplotlib.pyplot as plt
 import os
 import glob
-from findSN import *
+#from findSN import *
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 files_path = '../../N2188/Q2'
@@ -84,9 +83,42 @@ exclude_B=['N2188-1.Q2.B.161022_1631.A.028878.061035N3413.0060.nh.fits'
            ,'N2188-1.Q2.B.161217_1723.A.038033.061035N3413.0060.nh.fits'
            ,'N2188-1.Q2.B.161218_1301.A.038169.061035N3413.0060.nh.fits'
            ,'N2188-1.Q2.B.161219_1722.A.038421.061035N3413.0060.nh.fits']
-#files=set(files)-set(exclude_B)
+exclude_V=['N2188-1.Q2.V.161022_1633.A.028879.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161022_1633.A.028879.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161029_1603.A.030275.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161115_0034.S.041240.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161115_0632.C.036953.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161115_1602.A.032985.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161119_0107.S.041887.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161120_0031.S.042068.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161121_1605.A.034114.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161130_1359.A.035424.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161201_1726.A.035675.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161202_1705.A.035732.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161207_1555.A.036488.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161207_1659.A.036515.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161208_0343.C.041988.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161208_0452.C.042020.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161208_0707.C.042080.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161212_1556.A.037417.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161212_1656.A.037444.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161213_1549.A.037657.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161213_1703.A.037689.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161216_0048.S.046074.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161216_0151.S.046104.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161217_1415.A.037951.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161217_1618.A.038006.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161217_1726.A.038034.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161217_2343.S.046536.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161218_1303.A.038170.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161219_1620.A.038392.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161219_1724.A.038422.061035N3413.0060.nh.fits'
+          ,'N2188-1.Q2.V.161219_2144.S.046979.061035N3413.0060.nh.fits']           
+
+
+files=set(files)-set(exclude_V)
 for f in files:
     print f
-    # cmd='cp '+f+' Hostgal_B/'
+    # cmd='cp '+f+' Hostgal_V/'
     # os.system(cmd)
-    findSN(f, verbosity=1, directory='/home/afsari/PycharmProjects/kspSN/corrupted/pickim/V_band/')
+    #findSN(f, verbosity=1, directory='/home/afsari/PycharmProjects/kspSN/corrupted/pickim/V_band/')

@@ -69,6 +69,7 @@ for index,j in enumerate(u_t):
         bv=np.concatenate((bv,u[index]-v[sub].reshape((1,1))))
         bv_e=np.concatenate((bv_e,np.sqrt(np.square(v_e[sub].reshape((1,1)))+np.square(u_e[index].reshape((1,1))))))
 
+
 vi_t = np.zeros(shape=(0, 1))
 vi = np.zeros(shape=(0, 1))
 vi_e = np.zeros(shape=(0, 1))

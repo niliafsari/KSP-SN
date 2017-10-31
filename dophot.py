@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 def dophot(filename,verbosity=0, output=0):
     files_path = '/home/afsari/N2188/Q2'
-    diffext='.nh.REF-SUB_v2.fits'
-    outext = '.nh.apphot8_magcalc.cat'
+    diffext='.nh.REF-SUB_v4.fits'
+    outext = '.nh.psfphot9_magcalc.cat'
     os.chdir(files_path)
     info = filename.split('.')
     band=info[2]
@@ -21,15 +21,15 @@ def dophot(filename,verbosity=0, output=0):
         file_output=''
 
     if verbosity==1:
-        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -v -n 3.0 -psf 3 -y 2016 -a 8 -s 14.0 -r 1000 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
+        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -v -n 3.0 -psf 2 -y 2016 -s 14.0 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
     elif verbosity==2:
-        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -vv -n 3.0 -psf 3 -y 2016 -a 8 -s 14.0 -r 1000 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
+        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -vv -n 3.0 -psf 2 -y 2016 -s 14.0 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
     elif verbosity==3:
-        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -vvv -n 3.0 -psf 3 -y 2016 -a 8 -s 14.0 -r 1000 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
+        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -vvv -n 3.0 -psf 2 -y 2016 -s 14.0 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
     elif verbosity==4:
-        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -vvvv -n 3.0 -psf 3 -y 2016 -a 8 -s 14.0 -r 1000 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
+        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -vvvv -n 3.0 -psf 2 -y 2016 -s 14.0 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
     else:
-        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -n 3.0 -psf 3 -y 2016 -a 8 -s 14.0 -r 1000 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
+        run_command = 'python ~/SNAP2/MagCalc.py -c  aavso -o  N2188-1.Q2.SN -b \'' + band + '\' -p 92.654754:-34.14111 -r 1000 -fwhm 5 -n 3.0 -psf 2 -y 2016 -s 14.0 -f 19 --fit_sky ' + filename + ' -d ' + files_sub + ' ' + file_phot + file_output
 
 
     # if verbosity==1:
