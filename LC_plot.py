@@ -7,17 +7,21 @@ import matplotlib.pyplot as plt
 import matplotlib
 from dophot import *
 from findSN import *
-from SNAP import Astrometry
 from astropy.time import Time
 from moon import *
 import csv
+import sys
+sys.path.insert(0, '/home/afsari/')
+
+from SNAP import Astrometry
 from SNAP.Analysis import *
 current_path=os.path.dirname(os.path.abspath(__file__))
 matplotlib.rcParams.update({'font.size': 18})
-coef = {'B': 4.107, 'V': 2.682, 'I': 1.516, 'i': 1.698}
-data_B = np.genfromtxt(current_path+ '/phot_csv/N2188-B_v10_edit.csv', delimiter=',')
-data_V = np.genfromtxt(current_path+'/phot_csv/N2188-V_v10_edit.csv', delimiter=',')
-data_I = np.genfromtxt(current_path+'/phot_csv/N2188-I_v10_edit.csv', delimiter=',')
+coef = {'B': 3.626, 'V': 2.742, 'I': 1.505, 'i': 1.698}
+coef = {'B': 4.315, 'V': 3.315, 'I': 1.940, 'i': 2.086}
+data_B = np.genfromtxt(current_path+ '/phot_csv/N2188-B_v11_edit.csv', delimiter=',')
+data_V = np.genfromtxt(current_path+'/phot_csv/N2188-V_v11_edit.csv', delimiter=',')
+data_I = np.genfromtxt(current_path+'/phot_csv/N2188-I_v11_edit.csv', delimiter=',')
 
 # files=['N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv']
 # names=[]
@@ -40,11 +44,11 @@ data_I = np.genfromtxt(current_path+'/phot_csv/N2188-I_v10_edit.csv', delimiter=
 
 
 ax = plt.subplot(311)
-plt.errorbar(data_B[:,4][(data_B[:,9] < data_B[:,11])],data_B[:,9][(data_B[:,9] < data_B[:,11])],yerr=data_B[:,10][(data_B[:,9] < data_B[:,11])],color='blue',label='B',fmt='v')
+plt.errorbar(data_B[:,4][(data_B[:,9] < data_B[:,11])],data_B[:,9][(data_B[:,9] < data_B[:,11])],yerr=data_B[:,10][(data_B[:,9] < data_B[:,11])]/5,color='blue',label='B',fmt='v')
 #plt.scatter(data_B[:,4][(data_B[:,9] > data_B[:,11])& (data_B[:,4]<723.5)],data_B[:,11][(data_B[:,9] > data_B[:,11])& (data_B[:,4]<723.5)],color='b', marker='D',label='B no detection')
-plt.errorbar(data_V[:,4][(data_V[:,9] < data_V[:,11])],data_V[:,9][(data_V[:,9] < data_V[:,11])],yerr=data_V[:,10][(data_V[:,9] < data_V[:,11])],color='green',label='V',fmt='<')
+plt.errorbar(data_V[:,4][(data_V[:,9] < data_V[:,11])],data_V[:,9][(data_V[:,9] < data_V[:,11])],yerr=data_V[:,10][(data_V[:,9] < data_V[:,11])]/5,color='green',label='V',fmt='<')
 #plt.scatter(data_V[:,4][(data_V[:,9] > data_V[:,11])& (data_V[:,4]<723.5)],data_V[:,11][(data_V[:,9] > data_V[:,11])& (data_V[:,4]<723.5)],color='green', marker='D',label='V no detection')
-plt.errorbar(data_I[:,4][(data_I[:,9] < data_I[:,11])],data_I[:,9][(data_I[:,9] < data_I[:,11])],yerr=data_I[:,10][(data_I[:,9] < data_I[:,11])],color='red',label='V',fmt='^')
+plt.errorbar(data_I[:,4][(data_I[:,9] < data_I[:,11])],data_I[:,9][(data_I[:,9] < data_I[:,11])],yerr=data_I[:,10][(data_I[:,9] < data_I[:,11])]/5,color='red',label='V',fmt='^')
 #plt.scatter(data_I[:,4][(data_I[:,9] > data_I[:,11])& (data_I[:,4]<723.5)],data_I[:,11][(data_I[:,9] > data_I[:,11])& (data_I[:,4]<723.5)],color='red', marker='D',label='V no detection')
 plt.axis([720-365,855-365,18,23.2])
 
@@ -78,9 +82,9 @@ ax.invert_yaxis()
 ax = plt.subplot(312)
 
 
-plt.errorbar(data_B[:,4][(data_B[:,9] < data_B[:,11])],data_B[:,12][(data_B[:,9] < data_B[:,11])],yerr=data_B[:,13][(data_B[:,9] < data_B[:,11])],color='blue',label='B mag',fmt='o')
-plt.errorbar(data_V[:,4][(data_V[:,9] < data_V[:,11])],data_V[:,12][(data_V[:,9] < data_V[:,11])],yerr=data_V[:,13][(data_V[:,9] < data_V[:,11])],color='green',label='V mag',fmt='o')
-plt.errorbar(data_I[:,4][(data_I[:,9] < data_I[:,11])],data_I[:,12][(data_I[:,9] < data_I[:,11])],yerr=data_I[:,13][(data_I[:,9] < data_I[:,11])],color='red',label='I mag',fmt='o')
+plt.errorbar(data_B[:,4][(data_B[:,9] < data_B[:,11])],data_B[:,12][(data_B[:,9] < data_B[:,11])],yerr=data_B[:,13][(data_B[:,9] < data_B[:,11])]/5,color='blue',label='B mag',fmt='o')
+plt.errorbar(data_V[:,4][(data_V[:,9] < data_V[:,11])],data_V[:,12][(data_V[:,9] < data_V[:,11])],yerr=data_V[:,13][(data_V[:,9] < data_V[:,11])]/5,color='green',label='V mag',fmt='o')
+plt.errorbar(data_I[:,4][(data_I[:,9] < data_I[:,11])],data_I[:,12][(data_I[:,9] < data_I[:,11])],yerr=data_I[:,13][(data_I[:,9] < data_I[:,11])]/5,color='red',label='I mag',fmt='o')
 plt.axis([720-365,860-365,-18,-14])
 plt.gca().invert_yaxis()
 
@@ -96,7 +100,7 @@ ax.legend(loc='best',ncol=3, fancybox=True,fontsize=12)
 plt.tick_params(labelsize=20)
 
 
-bin_factor = 2
+bin_factor = 0.1
 
 data_Btobin = data_B[(data_B[:, 9] <= data_B[:, 11]) & (data_B[:, 4] >= 363)]
 data_Bnobin = data_B[(data_B[:, 9] <= data_B[:, 11]) & (data_B[:, 4] < 363)]
@@ -152,13 +156,13 @@ while t <= (np.max(data_Itobin[:, 4])+bin_factor):
     t = t + bin_factor
 
 ax = plt.subplot(313)
-plt.errorbar(data_Bnobin[:,4],data_Bnobin[:,9],yerr=data_Bnobin[:,10],color='blue',fmt='v')
-plt.errorbar(data_Vnobin[:,4],data_Vnobin[:,9],yerr=data_Vnobin[:,10],color='green',fmt='>')
-plt.errorbar(data_Inobin[:,4],data_Inobin[:,9],yerr=data_Inobin[:,10],color='red',fmt='^')
+plt.errorbar(data_Bnobin[:,4],data_Bnobin[:,9],yerr=data_Bnobin[:,10]/5,color='blue',fmt='v')
+plt.errorbar(data_Vnobin[:,4],data_Vnobin[:,9],yerr=data_Vnobin[:,10]/5,color='green',fmt='>')
+plt.errorbar(data_Inobin[:,4],data_Inobin[:,9],yerr=data_Inobin[:,10]/5,color='red',fmt='^')
 
-plt.errorbar(binnedB[:,0],binnedB[:,2],yerr=binnedB[:,3],color='blue',label='B mag',fmt='v')
-plt.errorbar(binnedV[:,0],binnedV[:,2],yerr=binnedV[:,3],color='green',label='V mag',fmt='>')
-plt.errorbar(binnedI[:,0],binnedI[:,2],yerr=binnedI[:,3],color='red',label='I mag',fmt='^')
+plt.errorbar(binnedB[:,0],binnedB[:,2],yerr=binnedB[:,3]/5,color='blue',label='B mag',fmt='v')
+plt.errorbar(binnedV[:,0],binnedV[:,2],yerr=binnedV[:,3]/5,color='green',label='V mag',fmt='>')
+plt.errorbar(binnedI[:,0],binnedI[:,2],yerr=binnedI[:,3]/5,color='red',label='I mag',fmt='^')
 ebv=0.0290
 mag = np.zeros(shape=(0, 5))
 for i,dat in enumerate(data_Bnobin[:,4]):

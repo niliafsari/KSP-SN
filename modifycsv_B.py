@@ -3,8 +3,8 @@ import csv
 from astropy.time import Time
 from moon import *
 
-in_filename='N2188-B_v10.csv'
-out_filename="N2188-B_v10_edit.csv"
+in_filename='N2188-B_v11.csv'
+out_filename="N2188-B_v11_edit.csv"
 my_file = open('phot_csv/'+in_filename, 'r')
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)
@@ -53,11 +53,11 @@ for l in data_list_v2:
 #     data=data[data[:,3] != int(index)]
 
 torem=[]
-for i, index in enumerate(data[:,3]):
-    I=data[i,7]
-    I_err=I/data[i,8]
-    if data[i,4]>473 or (data[i,9]>19.95 and data[i,4]>379 and data[i,4]<383) or (data[i,9]>20.2 and data[i,4]>382 and data[i,4]<391):
-        torem.append(mydict1[str(int(index))])
+# for i, index in enumerate(data[:,3]):
+#     I=data[i,7]
+#     I_err=I/data[i,8]
+#     if data[i,4]>473 or (data[i,9]>19.95 and data[i,4]>379 and data[i,4]<383) or (data[i,9]>20.2 and data[i,4]>382 and data[i,4]<391):
+#         torem.append(mydict1[str(int(index))])
 
 rem=['N2188-1.Q2.B.161227_2045.S.048536.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.B.170218_1148.A.044953.061035N3413.0060.nh.fits'
@@ -77,7 +77,9 @@ rem=['N2188-1.Q2.B.161227_2045.S.048536.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.B.170410_1858.S.003323.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.B.170408_0940.A.052639.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.B.170307_1130.A.048077.061035N3413.0060.nh.fits'
-     ,'N2188-1.Q2.B.170313_1834.S.062589.061035N3413.0060.nh.fits']
+     ,'N2188-1.Q2.B.170313_1834.S.062589.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.B.170307_0312.C.060388.061035N3413.0060.nh.fits'
+     ,'N2188-1.Q2.B.170318_1929.S.063738.061035N3413.0060.nh.fits']
 
 
 torem=torem+rem

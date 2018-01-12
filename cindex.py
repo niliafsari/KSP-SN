@@ -80,13 +80,33 @@ for index,j in enumerate(v_t):
         vi=np.concatenate((vi,v[index]-i[sub].reshape((1,1))))
         vi_e=np.concatenate((vi_e,np.sqrt(np.square(i_e[sub].reshape((1,1)))+np.square(v_e[index].reshape((1,1))))))
 
+cindex_t = np.zeros(shape=(0, 1))
+cindex_vi = np.zeros(shape=(0, 1))
+cindex_bv = np.zeros(shape=(0, 1))
+
+for index,j in enumerate(vi_t):
+    if np.min(np.abs(bv_t-j))<=0.1:
+        sub = np.argmin(np.abs(bv_t - j))
+        cindex_t=np.concatenate((cindex_t,bv_t[sub].reshape((1,1))))
+        cindex_vi=np.concatenate((cindex_vi,bv[sub].reshape((1,1))))
+        cindex_bv=np.concatenate((cindex_bv,vi[index].reshape((1,1))))
+
+cindex_t=cindex_t-cindex_t[0]
 ax=plt.subplot(111)
-print bv_t
-plt.scatter(bv_t,bv,label='B-V',color='blue')
-plt.scatter(vi_t,vi,label='V-I',color='red')
-plt.xlabel('Time [days]')
-plt.ylabel('Color index')
-plt.tick_params(labelsize=20)
-ax.legend(loc='lower right', fancybox=True,fontsize=12)
+
+plt.scatter(cindex_vi,cindex_bv, c=cindex_t, cmap='jet_r')
+plt.xlabel('V-I')
+plt.ylabel('B-V')
+cbar=plt.colorbar()
+cbar.set_label('time [days]')
+plt.show()
+
+# print bv_t
+# plt.scatter(bv_t,bv,label='B-V',color='blue')
+# plt.scatter(vi_t,vi,label='V-I',color='red')
+# plt.xlabel('Time [days]')
+# plt.ylabel('Color index')
+# plt.tick_params(labelsize=20)
+# ax.legend(loc='lower right', fancybox=True,fontsize=12)
 
 plt.show()

@@ -23,8 +23,9 @@ with open("logs/sn_names.txt") as f:
 
 file_names = [line.rstrip('\n') for line in file_names]
 files_count=len(file_names)
-Band='V'
-coef = {'B': 4.107, 'V': 2.682, 'I': 1.516, 'i': 1.698}
+Band='I'
+coef = {'B': 3.626, 'V': 2.742, 'I': 1.505, 'i': 1.698}
+coef = {'B': 4.315, 'V': 3.315, 'I': 1.940, 'i': 2.086}
 for i,sn_name in enumerate(file_names):
     mag = np.zeros(shape=(0, 5))
     location='/home/afsari/PycharmProjects/kspSN/SN_json/'
@@ -44,22 +45,37 @@ for i,sn_name in enumerate(file_names):
     ds=np.zeros(shape=(0,5))
     for dat in data[sn_name]["photometry"]:
         try:
-            if dat["band"]==Band:
-                add = np.concatenate(([dat["time"], dat["magnitude"], dat["e_magnitude"]]
+            if sn_name=='SN1987A':
+                ebv=0.2
+            if "e_magnitude" in dat:
+                error=float(dat["e_magnitude"])
+            else:
+                error=0
+            if dat["band"]==Band and Band != 'I':
+                if sn_name=='SN2014cx':
+                    add = np.concatenate(([dat["time"], dat["magnitude"], error], [deredMag(float(dat["magnitude"]), float(ebv), coef[Band])-31.27,error]))
+                else:
+                    add = np.concatenate(([dat["time"], dat["magnitude"], error]
                                       , absMag(deredMag(float(dat["magnitude"]), float(ebv), coef[Band]),
-                                               float(redshift), float(dat["e_magnitude"]), 0)))
+                                               float(redshift), error, 0)))
+                print sn_name,add
                 add=np.reshape(add,(1,5))
                 mag=np.concatenate((mag,add),axis=0)
-            else:
-                if Band == 'I' and sn_name!='SN2004ek' and sn_name!='SN2013ej' and sn_name!='SN2005cs' and sn_name!='SN20009bw' and sn_name!='SN2013fs' :
+            elif Band == 'I':
+                if sn_name!='SN1987A' and sn_name!='SN2004ek'  and sn_name!='SN2013ej' and sn_name!='SN2005cs' and sn_name!='SN20009bw' and sn_name!='SN2013fs' :
                     Band = 'i'
-                if dat["band"] == Band:
-                    add = np.concatenate(([dat["time"], dat["magnitude"], dat["e_magnitude"]]
+                if dat["band"]==Band :
+                    if sn_name == 'SN2014cx':
+                        add = np.concatenate(([dat["time"], dat["magnitude"], error],
+                                               [deredMag(float(dat["magnitude"]), float(ebv), coef[Band]) - 31.27,
+                                               error]))
+                    else:
+                        add = np.concatenate(([dat["time"], dat["magnitude"], error]
                                           , absMag(deredMag(float(dat["magnitude"]), float(ebv), coef[Band]),
-                                                   float(redshift), float(dat["e_magnitude"]), 0)))
+                                                   float(redshift), error, 0)))
                     add = np.reshape(add, (1, 5))
                     mag = np.concatenate((mag, add), axis=0)
-                #Band='I'
+                    Band='I'
         except:
             #print sn_name+" error in "
             #print dat

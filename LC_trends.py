@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 import matplotlib
 from dophot import *
 from findSN import *
+import sys
+sys.path.insert(0, '/home/afsari/')
+
+from SNAP import Astrometry
 from SNAP import Astrometry
 from astropy.time import Time
 from moon import *
@@ -15,11 +19,11 @@ current_path=os.path.dirname(os.path.abspath(__file__))
 matplotlib.rcParams.update({'font.size': 18})
 
 
-band='I'
+band='V'
 
 files=['N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv',
-       'N2188-B_v10_edit.csv','N2188-V_v10_edit.csv','N2188-I_v10_edit.csv',
-       'N2188-B_v9_edit.csv','N2188-V_v9_edit.csv','N2188-I_v9_edit.csv']
+       'N2188-B_v11_edit.csv','N2188-V_v11_edit.csv','N2188-I_v11_edit.csv',
+       'N2188-B_v10_edit.csv','N2188-V_v10_edit.csv','N2188-I_v10_edit.csv']
 names=[]
 for fil in files:
     data = np.genfromtxt(current_path + '/phot_csv/'+fil, delimiter=',')
@@ -108,7 +112,7 @@ ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 plt.axis([720-365,870-365,18,25])
 #plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('I mag')
+
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()
 
@@ -144,7 +148,7 @@ ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 plt.axis([720-365,870-365,18,25])
 #plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('V mag')
+
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()
 
@@ -158,12 +162,20 @@ else:
     print "band doesn't exist"
 data_B_v1[:,4]=data_B_v1[:,4]
 ax = plt.subplot(313)
-cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
-plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
+cond=( (data_B_v1[:,2]==0))
+plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond]/3,color='grey',label='S. Africa',fmt='v')
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==1))
-plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='cyan',label='Chile',fmt='<')
+plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond]/3,color='cyan',label='Chile',fmt='<')
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==2))
-plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='yellow',label='Australia',fmt='^')
+plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond]/3,color='yellow',label='Australia',fmt='^')
+
+# cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
+# plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,9][cond],color='grey',label='S. Africa',marker='v',edgecolor='black')
+# cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==1))
+# plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,9][cond],color='cyan',label='Chile',marker='<',edgecolor='black')
+# cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==2))
+# plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,9][cond],color='yellow',label='Australia',marker='^',edgecolor='black')
+
 
 cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='grey', marker='.',label='lim S')
@@ -198,7 +210,7 @@ ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
 plt.axis([720-365,870-365,18,25])
 plt.xlabel('time [days]')
 plt.ylabel('mag')
-plt.title('B mag')
+
 #plt.tight_layout()
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
 ax.invert_yaxis()

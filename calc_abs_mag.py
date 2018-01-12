@@ -4,7 +4,7 @@ sys.path.insert(0, '/home/afsari/')
 from SNAP2.Analysis import *
 import csv
 
-file_name="phot_csv/N2188-V_v10_edit.csv"
+file_name="phot_csv/N2188-I_v11_edit.csv"
 my_file = open(file_name, 'r')
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)

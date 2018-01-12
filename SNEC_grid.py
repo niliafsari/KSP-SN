@@ -72,6 +72,9 @@ def ReviseInlistFile(filename, profile, profile_comp, mixing, energy,mass):
         elif 'mass_excised =' in line:
             new_content = 'mass_excised =%(ex).2E \n' % {"ex": m_ex}
             fw.write(new_content)
+        elif 'bomb_mass_spread' in line:
+            new_content = 'bomb_mass_spread =%(ex).2E \n' % {"ex": mass*0.02}
+            fw.write(new_content)
         else:
             fw.write(line)
     fr.close()
@@ -82,9 +85,12 @@ def ReviseInlistFile(filename, profile, profile_comp, mixing, energy,mass):
 
 def main_loop():
     tasks=[]
-    mass=np.arange(11,11.5,0.6)
-    ni56_mixing=[3]
-    energy=np.arange(4e49,4.5e49,0.06e51)
+    mass=np.arange(11,28,0.6)
+    ni56_mixing=[3, 5, 7]
+    energy=np.arange(4e49,1.3e51,0.06e51)
+#     mass=[11]
+#     ni56_mixing=[3, 7]
+#     energy=[4e49]
     loc_bas='/home/afsari/SNEC-1.01/'
     model_dir= '/home/afsari/PycharmProjects/kspSN/models/'
     for i in mass:
