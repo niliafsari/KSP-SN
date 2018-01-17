@@ -100,7 +100,7 @@ ax.legend(loc='best',ncol=3, fancybox=True,fontsize=12)
 plt.tick_params(labelsize=20)
 
 
-bin_factor = 0.1
+bin_factor = 2
 
 data_Btobin = data_B[(data_B[:, 9] <= data_B[:, 11]) & (data_B[:, 4] >= 363)]
 data_Bnobin = data_B[(data_B[:, 9] <= data_B[:, 11]) & (data_B[:, 4] < 363)]
