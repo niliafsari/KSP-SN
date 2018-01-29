@@ -60,9 +60,11 @@ for i,sn_name in enumerate(file_names):
                                                float(redshift), error, 0)))
                 print sn_name,add
                 add=np.reshape(add,(1,5))
+                if sn_name=='SN2004er':
+                    print add
                 mag=np.concatenate((mag,add),axis=0)
             elif Band == 'I':
-                if sn_name!='SN1987A' and sn_name!='SN2004ek'  and sn_name!='SN2013ej' and sn_name!='SN2005cs' and sn_name!='SN20009bw' and sn_name!='SN2013fs' :
+                if sn_name!='SN1987A' and sn_name!='SN2004ek' and sn_name!='SN1999em' and sn_name!='SN1999cr' and sn_name!='SN2009ib'  and sn_name!='SN2013ej' and sn_name!='SN2005cs' and sn_name!='SN20009bw' and sn_name!='SN2013fs' :
                     Band = 'i'
                 if dat["band"]==Band :
                     if sn_name == 'SN2014cx':

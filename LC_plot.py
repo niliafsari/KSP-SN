@@ -166,47 +166,50 @@ plt.errorbar(binnedI[:,0],binnedI[:,2],yerr=binnedI[:,3]/5,color='red',label='I 
 ebv=0.0290
 mag = np.zeros(shape=(0, 5))
 for i,dat in enumerate(data_Bnobin[:,4]):
-    add = np.concatenate(([data_Bnobin[i,4], data_Bnobin[i,9], data_Bnobin[i,10]],absMag(deredMag(data_Bnobin[i,9], ebv, coef["B"]), 0.043,data_Bnobin[i,10],0.002)))
+    add = np.concatenate(([data_Bnobin[i,4], deredMag(data_Bnobin[i,9], ebv, coef["B"]), data_Bnobin[i,10]],absMag(deredMag(data_Bnobin[i,9], ebv, coef["B"]), 0.043,data_Bnobin[i,10],0.002)))
     add = np.reshape(add, (1, 5))
     mag = np.concatenate((mag, add), axis=0)
 
 for i,dat in enumerate(binnedB[:,0]):
-    add = np.concatenate(([binnedB[i,0], binnedB[i,2], binnedB[i,3]],
+    add = np.concatenate(([binnedB[i,0], deredMag(binnedB[i,2], ebv, coef["B"]), binnedB[i,3]],
                           absMag(deredMag(binnedB[i,2], ebv, coef["B"]), 0.043,binnedB[i,3],0.002)))
     add = np.reshape(add, (1, 5))
     mag = np.concatenate((mag, add), axis=0)
 mag=mag[mag[:,0]>357]
 np.save("phot_csv/compiledSN_"+"B"+"_"+"KSPN2188"+".npy", mag)
+np.savetxt("phot_csv/compiledSN_"+"B"+"_"+"KSPN2188"+".csv", mag)
 
 mag = np.zeros(shape=(0, 5))
 for i,dat in enumerate(data_Vnobin[:,4]):
-    add = np.concatenate(([dat, data_Vnobin[i,9], data_Vnobin[i,10]],
+    add = np.concatenate(([dat, deredMag(data_Vnobin[i,9], ebv, coef["V"]), data_Vnobin[i,10]],
                           absMag(deredMag(data_Vnobin[i,9], ebv, coef["V"]), 0.043,data_Vnobin[i,10],0.002)))
     add = np.reshape(add, (1, 5))
     mag = np.concatenate((mag, add), axis=0)
 
 for i,dat in enumerate(binnedV[:,0]):
-    add = np.concatenate(([binnedV[i,0], binnedV[i,2], binnedV[i,3]],
+    add = np.concatenate(([binnedV[i,0],deredMag(binnedV[i,2], ebv, coef["V"]), binnedV[i,3]],
                           absMag(deredMag(binnedV[i,2], ebv, coef["V"]), 0.043,binnedV[i,3],0.002)))
     add = np.reshape(add, (1, 5))
     mag = np.concatenate((mag, add), axis=0)
 mag=mag[mag[:,0]>357]
 np.save("phot_csv/compiledSN_"+"V"+"_"+"KSPN2188"+".npy", mag)
+np.savetxt("phot_csv/compiledSN_"+"V"+"_"+"KSPN2188"+".csv", mag)
 
 mag = np.zeros(shape=(0, 5))
 for i,dat in enumerate(data_Inobin[:,4]):
-    add = np.concatenate(([dat, data_Inobin[i,9], data_Inobin[i,10]],
+    add = np.concatenate(([dat, deredMag(data_Inobin[i,9], ebv, coef["I"]), data_Inobin[i,10]],
                           absMag(deredMag(data_Inobin[i,9], ebv, coef["I"]), 0.043,data_Inobin[i,10],0.002)))
     add = np.reshape(add, (1, 5))
     mag = np.concatenate((mag, add), axis=0)
 
 for i,dat in enumerate(binnedI[:,0]):
-    add = np.concatenate(([binnedI[i,0], binnedI[i,2], binnedI[i,3]],
+    add = np.concatenate(([binnedI[i,0], deredMag(binnedI[i,2], ebv, coef["I"]), binnedI[i,3]],
                           absMag(deredMag(binnedI[i,2], ebv, coef["I"]), 0.043,binnedI[i,3],0.002)))
     add = np.reshape(add, (1, 5))
     mag = np.concatenate((mag, add), axis=0)
 mag=mag[mag[:,0]>357]
 np.save("phot_csv/compiledSN_"+"I"+"_"+"KSPN2188"+".npy", mag)
+np.savetxt("phot_csv/compiledSN_"+"I"+"_"+"KSPN2188"+".csv", mag)
 
 plt.axis([720-365,860-365,18,23.2])
 plt.gca().invert_yaxis()
