@@ -94,12 +94,35 @@ for index,j in enumerate(vi_t):
 cindex_t=cindex_t-cindex_t[0]
 ax=plt.subplot(111)
 
-plt.scatter(cindex_vi,cindex_bv, c=cindex_t, cmap='jet_r')
+temp=np.genfromtxt("phot_csv/temperature.csv", delimiter=',')
+temp_filter=np.genfromtxt("phot_csv/temps_filter.csv", delimiter=',')
+BB_fluxB=np.genfromtxt("phot_csv/BB_fluxB_nofil.csv", delimiter=',')
+BB_fluxV=np.genfromtxt("phot_csv/BB_fluxV_nofil.csv", delimiter=',')
+BB_fluxI=np.genfromtxt("phot_csv/BB_fluxI_nofil.csv", delimiter=',')
+flux_0 = [ 4023, 3562, 2814]
+# BB_magB=-2.512*np.log10(BB_fluxB/flux_0[0])
+# BB_magV=-2.512*np.log10(BB_fluxV/flux_0[1])
+# BB_magI=-2.512*np.log10(BB_fluxI/flux_0[2])
+
+BB_bv=-2.512*np.log10(BB_fluxB/BB_fluxV)
+BB_vi=-2.512*np.log10(BB_fluxV/BB_fluxI)
+
+from scipy.interpolate import UnivariateSpline
+fit_temp = UnivariateSpline(temp[:,0] - temp[0,0], temp[:,1])
+cindex_temp=fit_temp(cindex_t)
+#plt.scatter(cindex_vi,cindex_bv, c=cindex_temp, cmap='jet')
+plt.scatter(cindex_vi,cindex_bv, c=cindex_temp, cmap='jet_r',label='Observed')
+plt.clim(4000, 15000)
+plt.scatter(BB_vi,BB_bv, c=temp_filter, marker='s', cmap='jet_r',label='Blackbody')
+plt.clim(4000, 15000)
 plt.xlabel('V-I')
 plt.ylabel('B-V')
 cbar=plt.colorbar()
-cbar.set_label('time [days]')
+cbar.set_label('Temperature [k]', rotation=270)
+#cbar.set_label('Time [day]', rotation=270)
+ax.legend(loc='upper left', fancybox=True,fontsize=12)
 plt.show()
+
 
 # print bv_t
 # plt.scatter(bv_t,bv,label='B-V',color='blue')
@@ -107,6 +130,5 @@ plt.show()
 # plt.xlabel('Time [days]')
 # plt.ylabel('Color index')
 # plt.tick_params(labelsize=20)
-# ax.legend(loc='lower right', fancybox=True,fontsize=12)
 
-plt.show()
+

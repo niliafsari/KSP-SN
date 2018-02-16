@@ -26,11 +26,15 @@ z = np.zeros(shape=(np.shape(data)[0], 3))
 
 data=np.c_[data, z]
 
+
+
 for index,rows in enumerate(my_list):
     content=rows[0].split('_')
     data[index, 3]=float(content[0].strip('s'))
     data[index, 4]=float(content[2])
     data[index, 5]=float(content[4])
+
+print data[np.argmin(data[:,1]),0],data[np.argmin(data[:,1]),2]
 
 data_3=data[data[:, 4]==3.0]
 data_5=data[data[:, 4]==5.0]
@@ -108,7 +112,7 @@ import matplotlib.patches as mpatch
 
 cb=plt.colorbar(sc)
 cb.set_label(r'\text{ln} \chi^2 / \chi_\min^2', rotation=270)
-plt.title(r"^{56} \text{Ni extend}=3 [M_\odot]")
+plt.title(r"^{56} \text{Ni}_\text{mixing}=3 [M_\odot]")
 plt.xlabel(r'M_{ZAMS} [M_\odot]')
 plt.ylabel('E [foe]')
 ax2 = plt.subplot(132)
@@ -122,7 +126,7 @@ t = ax2.text(data_5[f5,3],data_5[f5,5]/1.0e51, "hey", ha="center", va="center", 
 bb = t.get_bbox_patch()
 bb.set_boxstyle("square", pad=0.3)
 cb.set_label(r'\text{ln}  \chi^2 / \chi_\min^2', rotation=270)
-plt.title(r"^{56} \text{Ni extend}=5 [M_\odot]")
+plt.title(r"^{56} \text{Ni}_\text{mixing}=5 [M_\odot]")
 plt.xlabel(r'M_{ZAMS} [M_\odot]')
 plt.ylabel('E [foe]')
 ax3 = plt.subplot(133)
@@ -136,7 +140,7 @@ t = ax3.text(data_7[f7,3],data_7[f7,5]/1.0e51, "hey", ha="center", va="center", 
 bb = t.get_bbox_patch()
 bb.set_boxstyle("square", pad=0.3)
 cb.set_label(r'\text{ln} \chi^2 / \chi_\min^2', rotation=270)
-plt.title(r"^{56} \text{Ni extend}=7 [M_\odot]")
+plt.title(r"^{56} \text{Ni}_\text{mixing}=7 [M_\odot]")
 plt.xlabel(r'M_{ZAMS} [M_\odot]')
 plt.ylabel('E [foe]')
 

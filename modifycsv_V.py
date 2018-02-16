@@ -3,8 +3,8 @@ import csv
 from astropy.time import Time
 from moon import *
 
-in_filename='N2188-V_v11.csv'
-out_filename="N2188-V_v11_edit.csv"
+in_filename='N2188-V_v12.csv'
+out_filename="N2188-V_v12_edit.csv"
 my_file = open('phot_csv/'+in_filename, 'r')
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)
@@ -29,7 +29,7 @@ data=data[1:][:]
 # ,'N2188-1.Q2.V.170402_1925.S.001873.061035N3413.0060.nh.fits'
 # ,'N2188-1.Q2.V.170115_1931.S.050842.061035N3413.0060.nh.fits']
 
-in_filename_v2='N2188-V_v2_edit.csv'
+in_filename_v2='N2188-V_v12_edit.csv'
 my_file = open('phot_csv/'+in_filename_v2, 'r')
 reader = csv.reader(my_file, delimiter=',')
 my_list_v2 = list(reader)
@@ -65,23 +65,23 @@ torem=[]
 #     if (I)>(I_orig+I_orig_err):
 #         torem.append(mydict1[str(int(index))])
 
-for i, index in enumerate(data[:,3]):
-    I=data[i,7]
-    tt=data[i,4]
-    m=data[i,9]
-    I_err=I/data[i,8]
-    try:
-        name_orig=mydict1[str(int(index))]
-    except:
-        continue
-    if tt>491:
-        torem.append(name_orig)
-    if tt > 454 and m<19.35:
-        torem.append(name_orig)
-    if tt > 484 and m < 21.12:
-        torem.append(name_orig)
-
-print len(torem),torem
+# for i, index in enumerate(data[:,3]):
+#     I=data[i,7]
+#     tt=data[i,4]
+#     m=data[i,9]
+#     I_err=I/data[i,8]
+#     try:
+#         name_orig=mydict1[str(int(index))]
+#     except:
+#         continue
+#     if tt>491:
+#         torem.append(name_orig)
+#     if tt > 454 and m<19.35:
+#         torem.append(name_orig)
+#     if tt > 484 and m < 21.12:
+#         torem.append(name_orig)
+#
+# print len(torem),torem
 
 rem=['N2188-1.Q2.V.170123_0245.C.051298.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.V.170115_1931.S.050842.061035N3413.0060.nh.fits'
@@ -115,6 +115,10 @@ rem=['N2188-1.Q2.V.170123_0245.C.051298.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.V.170309_2051.S.061675.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.V.170309_1231.A.048494.061035N3413.0060.nh.fits'
      ,'N2188-1.Q2.V.170112_0352.C.048843.061035N3413.0060.nh.fits']
+
+rem=['N2188-1.Q2.V.170430_1745.S.008590.061035N3413.0060.nh.fits',
+     'N2188-1.Q2.V.170514_1720.S.012022.061035N3413.0060.nh.fits',
+     'N2188-1.Q2.V.170412_1021.A.053336.061035N3413.0060.nh.fits']
 
 torem=torem+rem
 

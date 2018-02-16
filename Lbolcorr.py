@@ -14,11 +14,12 @@ from SNAP2.Analysis import *
 sys.path.insert(0, '/home/afsari/SuperBoL-master/')
 from superbol.luminosity import calc_Lbol
 coef = {'B': 4.107, 'V': 2.682, 'I': 1.516, 'i': 1.698}
+coef = {'B': 4.315, 'V': 3.315, 'I': 1.940, 'i': 2.086}
 fluxes = np.array([4023.0* 1000000.0, 3562.0 * 1000000.0, 2282.0 * 1000000.0])
 
 ebv=0.029
 dis=5.6153658728e+26 #cm
-sn_name="KSPN2188"
+sn_name="KSPN2188_v1"
 
 magB = np.load("phot_csv/compiledSN_" + "B" + "_" + sn_name + ".npy")
 magB = magB.astype(np.float)
@@ -251,7 +252,9 @@ for k, M_mag in enumerate(Mv):
     if (1):
         #Lyman
         #Mbol[k] = M_mag + 0.057 + 0.708 * (vi[k]) - 0.912 * (np.square(vi[k]))
-#        Mbol[k] = M_mag + 0.059 + 0.744 * (vi[k]) - 0.953 * (np.square(vi[k]))
+    #V-R
+#        Mbol[k] = M_mag + 0.073 + 0.902 * (vi[k]) - 1.796 * (np.square(vi[k]))
+#       Mbol[k] = M_mag + 0.059 + 0.744 * (vi[k]) - 0.953 * (np.square(vi[k]))
         #Hamuy
         Mbol[k] = M_mag -1.3555 + 6.262 * (vi[k]) - 2.676 * (np.square(vi[k])) -22.973*np.power(vi[k],3) +35.542*np.power(vi[k],4)-15.34*np.power(vi[k],5)
         #Mbol[k] = M_mag - 0.7
@@ -261,6 +264,7 @@ for k, M_mag in enumerate(Mv):
     lbol_bc[k]=Lsun*np.power(10,((Msun-Mbol[k])/2.5))
     print vi_t[k],vi[k],Mbol[k],Mv[k],M_mag-vi[k],Mbol[k]-M_mag,lbol_bc[k],vi[k]
 app=Lsun*np.power(10,((Msun+16.4)/2.5))
+#Reaction Rate
 M_56=7.866e-44*np.multiply(lbol_bc[vi_t>=474.5],np.exp(((vi_t[vi_t>=474.5]-vi_t[0])/(1+0.043)-6.1)/111.26))
 eNi56=3.90e10*1.98e33
 eCo56=6.78e9*1.98e33
@@ -268,13 +272,15 @@ eCo56=6.78e9*1.98e33
 tNi=6.1
 tCo=111.26
 
+#Taddia
 M_ni56_taddia=np.multiply(lbol_bc[vi_t>=474.5],np.reciprocal(eNi56*np.exp(-(vi_t[vi_t>=474.5]-vi_t[0])/((1+0.043)*tNi))+
                                                          eCo56*(np.exp(-(vi_t[vi_t>=474.5]-vi_t[0])/((1+0.043)*tCo))
                                                                                      -np.exp(-(vi_t[vi_t>=474.5]-vi_t[0])/((1+0.043)*tNi)))))
 x=vi_t[vi_t>=474.5]-474.5
+#SN1987A
 M_56_new=0.075*(lbol_bc[vi_t>=474.5]/np.power(10,fit_2(x)))
-print "M_ni56_reactionrate",np.mean(M_56[14:]), "M_ni_sn87",np.mean(M_56_new[14:]),"M_56_taddia",np.mean(M_ni56_taddia[14:])
-print M_56[14:]
+print "M_ni56_reactionrate",np.mean(M_56[4:]), "M_ni_sn87",np.mean(M_56_new[4:]),"M_56_taddia",np.mean(M_ni56_taddia[4:])
+print np.shape(M_56)
 print "M_ni56_reactionrate",np.median(M_56), "M_ni_sn87",np.median(M_56_new),"M_56_taddia",np.median(M_ni56_taddia)
 
 ax=plt.subplot(111)
@@ -285,6 +291,6 @@ plt.plot(np.linspace(100,140),fit_2(np.linspace(0,40)),color='red',label='L87a')
 plt.xlabel('Time [days]')
 plt.ylabel('Log $L_{bol}$[erg/s]')
 ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
-ax.set_ylim([41, 44])
+ax.set_ylim([41, 43.5])
 plt.tick_params(labelsize=20)
 plt.show()

@@ -17,9 +17,9 @@ def is_number(s):
     except ValueError:
         return False
 
-f_B = open('phot_csv/N2188-B_v11.csv', 'w')
-f_I = open('phot_csv/N2188-I_v11.csv', 'w')
-f_V = open('phot_csv/N2188-V_v11.csv', 'w')
+f_B = open('phot_csv/N2188-B_v12.csv', 'w')
+f_I = open('phot_csv/N2188-I_v12.csv', 'w')
+f_V = open('phot_csv/N2188-V_v12.csv', 'w')
 
 writer_B = csv.writer(f_B)
 writer_B.writerow( ('Name','KSPtime','Location','index', 'time', 'RA', 'DEC','I', 'SN', 'M', 'Merr', 'Mlim' ))
@@ -33,7 +33,7 @@ writer_V.writerow( ('Name','KSPtime','Location','index', 'time', 'RA', 'DEC','I'
 
 current_path=os.path.dirname(os.path.abspath(__file__))
 files_path='/home/afsari/N2188/Q2'
-outext='.nh.psfconv9_magcalc.cat'
+outext='.nh.psfconv10_magcalc.cat'
 os.chdir(files_path)
 filename='N2188-1.Q2.*.*.*.*.061035N3413.0060'+outext
 bands={'B':0,'I':1,'V':2}
@@ -51,6 +51,8 @@ for f in files:
             j=j+1
             #findSN(f.replace('.nh.magcalc.cat', '.nh.fits'), 1, '/home/afsari/PycharmProjects/kspSN/corrupted/cantopen/')
             #dophot(f.replace(outext,'.nh.fits'),1,1)
+            cmd='rm ~/N2188/Q2/'+f
+            os.system(cmd)
             flag=1
             break
     if flag==1:
@@ -73,8 +75,8 @@ for f in files:
                   #dophot(names[i].replace(outext,'.nh.fits'),1,1)
                 writer_I.writerow((names[i].replace(outext,'.nh.fits'),timeksp,location,i,time,RA, DEC,I, SN, M, Merr, Mlim))
             else:
-                if (M<18.4 and M<Mlim) or (Merr>1 and M<Mlim):
-                      print names[i].replace(outext, '.nh.fits')
+                # if (M<18.4 and M<Mlim) or (Merr>1 and M<Mlim):
+                #       print names[i].replace(outext, '.nh.fits')
                 # #    findSN(names[i].replace(outext,'.nh.fits'),1,'/home/afsari/PycharmProjects/kspSN/corrupted/varhighV/')
                 writer_V.writerow((names[i].replace(outext,'.nh.fits'),timeksp,location,i,time,RA, DEC,I, SN, M, Merr, Mlim))
             i=i+1
