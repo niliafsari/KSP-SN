@@ -1,21 +1,32 @@
 from astropy.io import fits
 from astropy.wcs import WCS
 import numpy as np
-#import matplotlib.pyplot as plt
+import matplotlib
 import os
 import glob
 from findSN import *
-
+from matplotlib.ticker import AutoMinorLocator
 import sys
 
 sys.path.insert(0, '/home/afsari/')
 from SNAP2.Analysis import *
 
+matplotlib.rcParams['axes.linewidth'] = 1.5 #set the value globally
+matplotlib.rcParams['xtick.major.size'] = 5
+matplotlib.rcParams['xtick.major.width'] = 2
+matplotlib.rcParams['xtick.minor.size'] = 2
+matplotlib.rcParams['xtick.minor.width'] = 1.5
+matplotlib.rcParams['ytick.major.size'] = 5
+matplotlib.rcParams['ytick.major.width'] = 2
+matplotlib.rcParams['ytick.minor.size'] = 2
+matplotlib.rcParams['ytick.minor.width'] = 1.5
+matplotlib.rcParams.update({'font.size': 18})
 sys.path.insert(0, '/home/afsari/SuperBoL-master/')
 from superbol.luminosity import calc_Lbol
 coef = {'B': 4.107, 'V': 2.682, 'I': 1.516, 'i': 1.698}
 coef = {'B': 4.315, 'V': 3.315, 'I': 1.940, 'i': 2.086}
 fluxes = np.array([4023.0* 1000000.0, 3562.0 * 1000000.0, 2282.0 * 1000000.0])
+
 
 ebv=0.029
 dis=5.6153658728e+26 #cm
@@ -23,7 +34,7 @@ sn_name="KSPN2188_v1"
 
 magB = np.load("phot_csv/compiledSN_" + "B" + "_" + sn_name + ".npy")
 magB = magB.astype(np.float)
-
+sn1987a = np.genfromtxt ('1987a.csv', delimiter=",")
 u_t = magB[:, 0]
 u_t[u_t<370] = np.floor(u_t[u_t<370]*100)/100
 u_t[u_t>370]=np.floor(u_t[u_t>370])
@@ -283,14 +294,29 @@ print "M_ni56_reactionrate",np.mean(M_56[4:]), "M_ni_sn87",np.mean(M_56_new[4:])
 print np.shape(M_56)
 print "M_ni56_reactionrate",np.median(M_56), "M_ni_sn87",np.median(M_56_new),"M_56_taddia",np.median(M_ni56_taddia)
 
-ax=plt.subplot(111)
-plt.scatter(vi_t-vi_t[0],np.log10(lbol_bc),color='blue',label='L_bol')
-plt.plot(np.linspace(100,140),fit_3(np.linspace(100,140)),color='black',label='Co56')
-plt.plot(np.linspace(10,15),fit_4(np.linspace(10,15)),color='cyan',label='Ni56')
-plt.plot(np.linspace(100,140),fit_2(np.linspace(0,40)),color='red',label='L87a')
+ax1=plt.subplot(111)
+plt.rc('text', usetex=True)
+ind=np.where((np.log10(lbol_bc)<42.87) & ((vi_t-vi_t[0])<5 ))
+print np.shape(lbol_bc),np.shape(vi_t)
+lbol_bc=np.delete(lbol_bc,np.where((np.log10(lbol_bc)<42.87) & ((vi_t-vi_t[0])<5 ) ),0)
+vi_t=np.delete(vi_t,ind,0)
+plt.scatter(vi_t-vi_t[0],np.log10(lbol_bc),color='black',label='KSP-SN-2016kf',
+            s=28,lw=1.2, edgecolor='black')
+
+np.savetxt('/home/afsari/PycharmProjects/kspSN/phot_csv/Lbol.csv',zip(vi_t-vi_t[0],lbol_bc))
+plt.plot(np.linspace(100,140),fit_3(np.linspace(100,140)),'--',color='blue',label=r'$^{56}Co$',lw=2)
+plt.plot(np.linspace(10,15),fit_4(np.linspace(10,15)),'-.',color='green',label=r'$^{56}Ni$',lw=2)
+#plt.plot(np.linspace(100,140),fit_2(np.linspace(0,40)),color='red',label='L87a',lw=1.5)
+plt.plot(sn1987a[:,0],sn1987a[:,1],color='red',label='SN1987A',lw=1.5)
 plt.xlabel('Time [days]')
-plt.ylabel('Log $L_{bol}$[erg/s]')
-ax.legend(loc='best',ncol=6, fancybox=True,fontsize=12)
-ax.set_ylim([41, 43.5])
+plt.ylabel('Log $L_{bol}$[erg $s^{-1}$]')
+ax1.legend(loc='best',ncol=1, fancybox=True,fontsize=15, frameon=False)
+ax1.set_ylim([41, 43.2])
+ax1.set_xlim([-5, 200])
+ax1.yaxis.set_minor_locator(AutoMinorLocator(5))
+ax1.xaxis.set_minor_locator(AutoMinorLocator(5))
+ax1.xaxis.set_tick_params(width=1.5)
+ax1.yaxis.set_tick_params(width=1.5)
 plt.tick_params(labelsize=20)
+plt.tight_layout()
 plt.show()

@@ -4,9 +4,20 @@ from astropy.time import Time
 import matplotlib.pyplot as plt
 import matplotlib
 
+from matplotlib.ticker import AutoMinorLocator
 
-
-my_file = open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_1.csv", "r")
+matplotlib.rcParams.update({'font.size': 24})
+matplotlib.rcParams['axes.linewidth'] = 1.5 #set the value globally
+matplotlib.rcParams['xtick.major.size'] = 5
+matplotlib.rcParams['xtick.major.width'] = 2
+matplotlib.rcParams['xtick.minor.size'] = 2
+matplotlib.rcParams['xtick.minor.width'] = 1.5
+matplotlib.rcParams['ytick.major.size'] = 5
+matplotlib.rcParams['ytick.major.width'] = 2
+matplotlib.rcParams['ytick.minor.size'] = 2
+matplotlib.rcParams['ytick.minor.width'] = 1.5
+plt.rc('text', usetex=True)
+my_file = open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_80.csv", "r")
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)
 my_file.close()
@@ -44,11 +55,15 @@ data_3=data_3[data_3[:,1].argsort()]
 data_5=data_5[data_5[:,1].argsort()]
 data_7=data_7[data_7[:,1].argsort()]
 
+scale3=data_3[0,1]
+scale5=data_5[0,1]
+scale7=data_7[0,1]
+
 data_3[:,1]=data_3[:,1]/data_3[0,1]
 data_5[:,1]=data_5[:,1]/data_5[0,1]
 data_7[:,1]=data_7[:,1]/data_7[0,1]
 
-plt.rc('text', usetex=True)
+
 plt.rc('font', family='serif')
 
 x1, y1 = np.meshgrid(np.arange(11,28,0.6),np.arange(4e49,1.95e51,0.06e51)/1.0e51)
@@ -56,14 +71,14 @@ from scipy.interpolate import griddata
 grid_3 = griddata(zip(data_3[:,3],data_3[:,5]/1.0e51),np.log10(data_3[:,1]), (x1, y1), method='nearest')
 x=np.arange(11,28,0.6)
 y=np.arange(4e49,1.95e51,0.06e51)
-f3=np.argmin(data_3[:,1])
-print data_3[f3,3],data_3[f3,5]/1.0e51
-f5=np.argmin(data_5[:,1])
-print data_5[f5,3],data_5[f5,5]/1.0e51
-f7=np.argmin(data_7[:,1])
-print data_7[f7,3],data_7[f7,5]/1.0e51
+f3=np.nanargmin(data_3[:,1])
+print data_3[f3,1]*scale3,data_3[f3,3],data_3[f3,5]/1.0e51, data_3[f3,2]
+f5=np.nanargmin(data_5[:,1])
+print data_5[f5,1]*scale5,data_5[f5,3],data_5[f5,5]/1.0e51, data_5[f5,2]
+f7=np.nanargmin(data_7[:,1])
+print data_7[f7,1]*scale7,data_7[f7,3],data_7[f7,5]/1.0e51, data_7[f7,2]
 print mydict1
-print mydict1[str(int(data[np.argmin(data[:,1]),0]))], data[np.argmin(data[:,1]),2]
+print mydict1[str(int(data[np.nanargmin(data[:,1]),0]))], data[np.nanargmin(data[:,1]),2]
 for u,i in enumerate(x):
     for v,j in enumerate(y):
         dir_name = 's%(num)2.1f_ni56_%(mixing)i_efin_%(efin).2E' % {"num": i, "mixing": 3, "efin": j}
@@ -95,54 +110,73 @@ for u,i in enumerate(x):
                 grid_7[v, u] = np.nan
         except:
             grid_7[v, u] = np.nan
+#
+# ax1 = plt.subplot(131)
+# sc=plt.pcolormesh(np.arange(11,28,0.6),np.arange(4e49,1.95e51,0.06e51)/1.0e51,grid_3, cmap='jet_r',vmin=np.nanmin(grid_3), vmax=np.nanmax(grid_3))
+# sc.cmap.set_under('white')
+# bbox_props = dict(boxstyle="rarrow,pad=0.3", fc="black", ec="black", lw=2)
+# t = ax1.text(data_3[f3,3],data_3[f3,5]/1.0e51, "hey", ha="center", va="center", rotation=90,
+#             size=3,
+#             bbox=bbox_props)
+# bb = t.get_bbox_patch()
+# bb.set_boxstyle("square", pad=0.3)
+# import matplotlib.patches as mpatch
+#
+# plt.clim(0,2.75)
 
-ax1 = plt.subplot(131)
-sc=plt.pcolormesh(np.arange(11,28,0.6),np.arange(4e49,1.95e51,0.06e51)/1.0e51,grid_3, cmap='jet_r',vmin=np.nanmin(grid_3), vmax=np.nanmax(grid_3))
-sc.cmap.set_under('white')
-bbox_props = dict(boxstyle="rarrow,pad=0.3", fc="black", ec="black", lw=2)
-t = ax1.text(data_3[f3,3],data_3[f3,5]/1.0e51, "hey", ha="center", va="center", rotation=90,
-            size=3,
-            bbox=bbox_props)
-bb = t.get_bbox_patch()
-bb.set_boxstyle("square", pad=0.3)
-import matplotlib.patches as mpatch
 
+# cb=plt.colorbar(sc)
+# cb.set_label(r'\text{ln} \chi^2 / \chi_\min^2', rotation=270)
+# plt.title(r"$^{56} Ni_{mixing}=3 [M_\odot]$")
+# plt.xlabel(r'M_{ZAMS} [M_\odot]')
+# plt.clim(0,2.75)
 
-
-
-cb=plt.colorbar(sc)
-cb.set_label(r'\text{ln} \chi^2 / \chi_\min^2', rotation=270)
-plt.title(r"^{56} \text{Ni}_\text{mixing}=3 [M_\odot]")
-plt.xlabel(r'M_{ZAMS} [M_\odot]')
+# ax1.set_xlim([9.8, 28.2])
+# ax1.yaxis.set_minor_locator(AutoMinorLocator(5))
+# ax1.xaxis.set_minor_locator(AutoMinorLocator(10))
+# ax1.xaxis.set_tick_params(width=1.5)
+# ax1.yaxis.set_tick_params(width=1.5)
+ax2 = plt.subplot(111)
 plt.ylabel('E [foe]')
-ax2 = plt.subplot(132)
 sc=plt.pcolormesh(np.arange(11,28,0.6),np.arange(4e49,1.95e51,0.06e51)/1.0e51,grid_5, cmap='jet_r',vmin=np.nanmin(grid_5), vmax=np.nanmax(grid_5))
 sc.cmap.set_under('white')
-cb=plt.colorbar(sc)
+#ax2.yaxis.set_ticklabels([])
+# cb=plt.colorbar(sc)
 bbox_props = dict(boxstyle="rarrow,pad=0.3", fc="black", ec="black", lw=2)
 t = ax2.text(data_5[f5,3],data_5[f5,5]/1.0e51, "hey", ha="center", va="center", rotation=90,
             size=3,
             bbox=bbox_props)
 bb = t.get_bbox_patch()
 bb.set_boxstyle("square", pad=0.3)
-cb.set_label(r'\text{ln}  \chi^2 / \chi_\min^2', rotation=270)
-plt.title(r"^{56} \text{Ni}_\text{mixing}=5 [M_\odot]")
-plt.xlabel(r'M_{ZAMS} [M_\odot]')
-plt.ylabel('E [foe]')
-ax3 = plt.subplot(133)
-sc=plt.pcolormesh(np.arange(11,28,0.6),np.arange(4e49,1.95e51,0.06e51)/1.0e51,grid_7, cmap='jet_r',vmin=np.nanmin(grid_7), vmax=np.nanmax(grid_7))
-sc.cmap.set_under('white')
+ax2.set_xlim([9.8, 28.2])
+ax2.yaxis.set_minor_locator(AutoMinorLocator(5))
+ax2.xaxis.set_minor_locator(AutoMinorLocator(10))
+ax2.xaxis.set_tick_params(width=1.5)
+ax2.yaxis.set_tick_params(width=1.5)
+# cb.set_label(r'\text{ln}  \chi^2 / \chi_\min^2', rotation=270)
+#plt.title(r"$^{56} \text{Ni}_\text{mixing}=5 [M_\odot]")
+plt.xlabel(r'$M_{ZAMS} [M_\odot]$')
+# ax3 = plt.subplot(133)
+# sc=plt.pcolormesh(np.arange(11,28,0.6),np.arange(4e49,1.95e51,0.06e51)/1.0e51,grid_7, cmap='jet_r',vmin=np.nanmin(grid_7), vmax=np.nanmax(grid_7))
+# sc.cmap.set_under('white')
 cb=plt.colorbar(sc)
-bbox_props = dict(boxstyle="rarrow,pad=0.3", fc="black", ec="black", lw=2)
-t = ax3.text(data_7[f7,3],data_7[f7,5]/1.0e51, "hey", ha="center", va="center", rotation=90,
-            size=3,
-            bbox=bbox_props)
-bb = t.get_bbox_patch()
-bb.set_boxstyle("square", pad=0.3)
-cb.set_label(r'\text{ln} \chi^2 / \chi_\min^2', rotation=270)
-plt.title(r"^{56} \text{Ni}_\text{mixing}=7 [M_\odot]")
-plt.xlabel(r'M_{ZAMS} [M_\odot]')
-plt.ylabel('E [foe]')
-
+# plt.clim(0,2.75)
+# bbox_props = dict(boxstyle="rarrow,pad=0.3", fc="black", ec="black", lw=2)
+# t = ax3.text(data_7[f7,3],data_7[f7,5]/1.0e51, "hey", ha="center", va="center", rotation=90,
+#             size=3,
+#             bbox=bbox_props)
+# bb = t.get_bbox_patch()
+# ax3.yaxis.set_ticklabels([])
+# ax3.set_xlim([9.8, 28.2])
+# ax3.yaxis.set_minor_locator(AutoMinorLocator(5))
+# ax3.xaxis.set_minor_locator(AutoMinorLocator(10))
+# ax3.xaxis.set_tick_params(width=1.5)
+# ax3.yaxis.set_tick_params(width=1.5)
+# bb.set_boxstyle("square", pad=0.3)
+cb.set_label(r'$ln (\chi^2 \chi_{min}^{-2} )$', labelpad=23,rotation=270)
+#plt.title(r"^{56} \text{Ni}_\text{mixing}=7 [M_\odot]")
+#plt.ylabel('E [foe]')
+plt.tight_layout()
+#plt.subplots_adjust(hspace=0.1, wspace=0)
 plt.show()
 

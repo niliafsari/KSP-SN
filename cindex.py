@@ -17,7 +17,7 @@ import json
 from pprint import pprint
 import os.path
 
-sn_name="KSPN2188"
+sn_name="KSPN2188_v1"
 
 magB = np.load("phot_csv/compiledSN_" + "B" + "_" + sn_name + ".npy")
 magB = magB.astype(np.float)
@@ -69,6 +69,7 @@ for index,j in enumerate(u_t):
         bv=np.concatenate((bv,u[index]-v[sub].reshape((1,1))))
         bv_e=np.concatenate((bv_e,np.sqrt(np.square(v_e[sub].reshape((1,1)))+np.square(u_e[index].reshape((1,1))))))
 
+print bv_e
 
 vi_t = np.zeros(shape=(0, 1))
 vi = np.zeros(shape=(0, 1))
@@ -79,6 +80,13 @@ for index,j in enumerate(v_t):
         vi_t=np.concatenate((vi_t,i_t[sub].reshape((1,1))))
         vi=np.concatenate((vi,v[index]-i[sub].reshape((1,1))))
         vi_e=np.concatenate((vi_e,np.sqrt(np.square(i_e[sub].reshape((1,1)))+np.square(v_e[index].reshape((1,1))))))
+
+#vi=np.a[vi_t vi]
+bv=np.concatenate((bv_t, bv, bv_e),axis=1)
+vi=np.concatenate((vi_t, vi,vi_e),axis=1)
+#
+np.save('phot_csv/vi.npy',vi)
+np.save('phot_csv/bv.npy',bv)
 
 cindex_t = np.zeros(shape=(0, 1))
 cindex_vi = np.zeros(shape=(0, 1))

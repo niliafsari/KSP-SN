@@ -6,7 +6,7 @@ import matplotlib
 
 
 
-my_file = open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_csm.csv", "r")
+my_file = open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_csm_21.2.csv", "r")
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)
 my_file.close()
@@ -40,13 +40,14 @@ for index,rows in enumerate(my_list):
 
 data=data[data[:,1].argsort()]
 
-
+scale=data[0,1]
 data[:,1]=data[:,1]/data[0,1]
 
 solar_radius = 6.96e10
 solar_mass = 1.99e33
 #model_radius = 72567442288907.27
 model_radius = 0.5694193820696878e014
+model_radius = 86493739248921.08
 model_radius_solar = model_radius / solar_radius
 rad = np.arange(model_radius_solar + 2, 3800, 100)
 rad_solar = rad * solar_radius
@@ -61,12 +62,12 @@ grid = griddata(zip(data[:,3],data[:,4]),np.log10(data[:,1]), (x1, y1), method='
 x=np.arange(model_radius_solar + 2, 3800, 100)
 y=np.arange(1.0e17, 3.0e18, 1.0e17)
 f3=np.argmin(data[:,1])
-print data[f3,0],data[f3,1],data[f3,2],data[f3,3],data[f3,4], "hi"
+print data[f3,0],data[f3,1]*scale,data[f3,2],data[f3,3],data[f3,4], "hi"
 #print mydict1[str(int(data[np.argmin(data[:,1]),0]))], data[np.argmin(data[:,1]),2]
 #print mydict_rev
 for u,i in enumerate(x):
     for v,j in enumerate(y):
-        dir_name = 's%(num)2.1f_%(radius)i_K_%(cons).2E' % {"num": 14.6, "radius": np.floor(i), "cons": j}
+        dir_name = 's%(num)2.1f_%(radius)i_K_%(cons).2E' % {"num": 21.2, "radius": np.floor(i), "cons": j}
         try:
             s= mydict_rev[str(dir_name)], dir_name
             if np.all(np.in1d( [int(mydict_rev[dir_name])],data[:, 0]))==False:

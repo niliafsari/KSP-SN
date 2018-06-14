@@ -1,0 +1,67 @@
+import os
+import glob
+import subprocess
+import commands
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+from matplotlib.ticker import AutoMinorLocator
+from dophot import *
+from findSN import *
+from astropy.time import Time
+from moon import *
+import csv
+import sys
+sys.path.insert(0, '/home/afsari/')
+
+from SNAP import Astrometry
+from SNAP.Analysis import *
+current_path=os.path.dirname(os.path.abspath(__file__))
+matplotlib.rcParams.update({'font.size': 18})
+matplotlib.rcParams['axes.linewidth'] = 1.5 #set the value globally
+matplotlib.rcParams['xtick.major.size'] = 5
+matplotlib.rcParams['xtick.major.width'] = 2
+matplotlib.rcParams['xtick.minor.size'] = 2
+matplotlib.rcParams['xtick.minor.width'] = 1.5
+matplotlib.rcParams['ytick.major.size'] = 5
+matplotlib.rcParams['ytick.major.width'] = 2
+matplotlib.rcParams['ytick.minor.size'] = 2
+matplotlib.rcParams['ytick.minor.width'] = 1.5
+
+
+coef = {'B': 3.626, 'V': 2.742, 'I': 1.505, 'i': 1.698}
+coef = {'B': 4.315, 'V': 3.315, 'I': 1.940, 'i': 2.086}
+data_B = np.genfromtxt(current_path+ '/phot_csv/N300-B_v1.csv', delimiter=',')
+data_V = np.genfromtxt(current_path+'/phot_csv//N300-V_v1.csv', delimiter=',')
+data_I = np.genfromtxt(current_path+'/phot_csv//N300-I_v1.csv', delimiter=',')
+
+#data_I[data_I[:,9] < 19.2,:]=[]
+data_I=np.delete(data_I, np.where((data_I[:,9] < 19.2) & (data_I[:,4] > 707) ), axis=0)
+ax = plt.subplot(111)
+u=np.min(data_I[:,4][(data_I[:,9] < data_I[:,11])])
+
+# plt.errorbar(data_B[:,4][(data_B[:,9] < data_B[:,11])],data_B[:,9][(data_B[:,9] < data_B[:,11])],yerr=data_B[:,10][(data_B[:,9] < data_B[:,11])],color='blue',label='B-band',fmt='o',markersize=10,markeredgecolor='black',
+#              markeredgewidth=1.2)
+# plt.errorbar(data_V[:,4][(data_V[:,9] < data_V[:,11])],data_V[:,9][(data_V[:,9] < data_V[:,11])]-1.6,yerr=data_V[:,10][(data_V[:,9] < data_V[:,11])],color='green',label='V-band',fmt='o',markersize=10,markeredgecolor='black',
+#              markeredgewidth=1.2)
+plt.errorbar(data_I[:,4][(data_I[:,9] < data_I[:,11])]-u,data_I[:,9][(data_I[:,9] < data_I[:,11])],yerr=data_I[:,10][(data_I[:,9] < data_I[:,11])],color='red',label='I-band',fmt='o',markersize=10,markeredgecolor='black',
+             markeredgewidth=1.2)
+#plt.axis([720-365,855-365,18,23.2])
+ax.set_xlim([-3, 45])
+# ax.set_ylim([18, 20.7])
+plt.gca().invert_yaxis()
+plt.xlabel('Time [days]')
+plt.ylabel('Apparent Magnitude (Vega)')
+ax.legend(loc='best',ncol=1, fancybox=True,fontsize=14, frameon=False)
+#ax1.spines[side].set_linewidth(size)
+ax.yaxis.set_minor_locator(AutoMinorLocator(10))
+ax.xaxis.set_minor_locator(AutoMinorLocator(10))
+ax.xaxis.set_tick_params(width=1.5)
+ax.yaxis.set_tick_params(width=1.5)
+#plt.xticks(np.arange(-1, 10, 1.0))
+y=np.arange(18, 22,0.2)
+ax.fill_betweenx(y,x1=16,x2=17, color='y',alpha=0.5,zorder=0)
+plt.annotate('KSP-N300-1_2017iv', xy=(0.3, 0.05), xycoords='axes fraction')
+ax.text(16.2, 18.5, '2017B', fontsize=13, rotation='vertical',multialignment='center',va='center')
+plt.tight_layout()
+plt.show()

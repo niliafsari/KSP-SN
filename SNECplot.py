@@ -3,7 +3,20 @@ import glob
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import interpolate
-
+import matplotlib
+from matplotlib.ticker import AutoMinorLocator
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+matplotlib.rcParams['axes.linewidth'] = 1.5 #set the value globally
+matplotlib.rcParams['xtick.major.size'] = 5
+matplotlib.rcParams['xtick.major.width'] = 2
+matplotlib.rcParams['xtick.minor.size'] = 2
+matplotlib.rcParams['xtick.minor.width'] = 1.5
+matplotlib.rcParams['ytick.major.size'] = 5
+matplotlib.rcParams['ytick.major.width'] = 2
+matplotlib.rcParams['ytick.minor.size'] = 2
+matplotlib.rcParams['ytick.minor.width'] = 1.5
+matplotlib.rcParams.update({'font.size': 21})
+matplotlib.rc('text', usetex=True)
 def SNECplot(filename,offset=0,verbosity=0):
     files_path ='/home/afsari/gpc_SNEC/'
     os.chdir(files_path)
@@ -20,7 +33,6 @@ def SNECplot(filename,offset=0,verbosity=0):
         mags = np.genfromtxt(output_out, delimiter=' ')
     except:
         print "error"
-    output_info = filename + '/output/info.dat'
     f_info = open(output_info, 'r')
     for line in f_info:
         if 'Time of breakout' in line:
@@ -29,11 +41,37 @@ def SNECplot(filename,offset=0,verbosity=0):
             line = line.strip()
             t_BO = float(line)
     mags[:,0]=mags[:,0]-t_BO
+    filename1='s14.6_1020_K_9.00E+17'
+    output_path=filename1+'/output/magnitudes.dat'
+    output_out = filename1 + '/output/magnitudes_output1.dat'
+    output_info = filename1 + '/output/info.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        mags1 = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
+    f_info = open(output_info, 'r')
+    for line in f_info:
+        if 'Time of breakout' in line:
+            line = line.strip('Time of breakout =')
+            line = line.strip('seconds\n')
+            line = line.strip()
+            t_BO1 = float(line)
+    mags1[:,0]=mags1[:,0]-t_BO1
+
     ax=plt.subplot(111)
 
-    plt.plot(mags[:,0]/84000.0-offset,mags[:,9],label='B simulation',color='blue')
-    plt.plot(mags[:,0]/84000.0-offset,mags[:,10],label='V simulation',color='green')
-    plt.plot(mags[:,0]/84000.0-offset,mags[:,12],label='I simulation',color='red')
+    plt.plot(mags[:,0]/84000.0-offset,mags[:,9],label='B no CSM',color='blue',lw=2)
+    plt.plot(mags[:,0]/84000.0-offset,mags[:,10],label='V no CSM',color='green',lw=2)
+    plt.plot(mags[:,0]/84000.0-offset,mags[:,12],label='I no CSM',color='red',lw=2)
+    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,9],'--',label='B CSM',color='blue',lw=2)
+    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,10],'--',label='V CSM',color='green',lw=2)
+    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,12],'--',label='I CSM',color='red',lw=2)
     # tck = interpolate.splrep(mags[:,0]/84000.0-offset,mags[:,9], s=0)
     # tt = np.arange(0, 118, 0.2)
     # magnew = interpolate.splev(tt, tck, der=0)
@@ -41,16 +79,206 @@ def SNECplot(filename,offset=0,verbosity=0):
     files_path ='/home/afsari/PycharmProjects/kspSN'
     os.chdir(files_path)
     u_t, u, ue, v_t, v, ve, i_t, i, ie = getLC()
-    plt.scatter(u_t,u,label='B observed',marker='*',color='blue',s=1.5)
-    plt.scatter(v_t,v,label='V observed',marker='*',color='green',s=1.5)
-    plt.scatter(i_t,i,label='I observed',marker='*',color='red',s=1.5)
+    plt.scatter(u_t,u,label='B observed',marker='o',color='blue',s=2.5)
+    plt.scatter(v_t,v,label='V observed',marker='o',color='green',s=2.5)
+    plt.scatter(i_t,i,label='I observed',marker='o',color='red',s=2.5)
+    ax.yaxis.set_minor_locator(AutoMinorLocator(10))
+    ax.xaxis.set_minor_locator(AutoMinorLocator(10))
+    ax.xaxis.set_tick_params(width=1.5)
+    ax.yaxis.set_tick_params(width=1.5)
     ax.set_xlim([0, 119])
-    ax.set_ylim([-19, -13])
+    ax.set_ylim([-19, -14])
     ax.invert_yaxis()
     plt.ylabel('Absolute Magnitude')
     plt.xlabel('Time [days]')
-    plt.title('Best fit model '+filename)
-    ax.legend(loc='lower left', ncol=2, fancybox=True, fontsize=12)
+    #plt.title('Best fit model '+filename)
+    ax.legend(loc='upper center', ncol=3, fancybox=True, fontsize=12, frameon=False)
+    ax1 = inset_axes(ax, width="45%",  # width = 30% of parent_bbox
+                    height=1.83,  # height : 1 inch
+                    loc=3, bbox_to_anchor=(0.069, 0.03, 1, 1),
+                    bbox_transform=ax.transAxes)
+    ax1.plot(mags[:,0]/84000.0-offset,mags[:,9],label='B no CSM',color='blue',lw=1.5)
+    ax1.plot(mags[:,0]/84000.0-offset,mags[:,10],label='V no CSM',color='green',lw=1.5)
+    ax1.plot(mags[:,0]/84000.0-offset,mags[:,12],label='I no CSM',color='red',lw=1.5)
+    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,9],'--',label='B CSM',color='blue',lw=1.5)
+    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,10],'--',label='V CSM',color='green',lw=1.5)
+    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,12],'--',label='I CSM',color='red',lw=1.5)
+    ax1.scatter(u_t,u,label='B observed',marker='o',color='blue',s=3.5)
+    ax1.scatter(v_t,v,label='V observed',marker='o',color='green',s=3.5)
+    ax1.scatter(i_t,i,label='I observed',marker='o',color='red',s=3.5)
+    ax1.yaxis.set_minor_locator(AutoMinorLocator(10))
+    ax1.xaxis.set_minor_locator(AutoMinorLocator(10))
+    ax1.xaxis.set_tick_params(width=1.5)
+    ax1.yaxis.set_tick_params(width=1.5)
+    for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label] +
+                     ax1.get_xticklabels() + ax1.get_yticklabels()):
+        item.set_fontsize(13)
+    ax1.set_xlim([-0.5, 6])
+    ax1.set_ylim([-18, -15])
+    ax1.invert_yaxis()
+    plt.show()
+    return
+
+def SNEC_all(filename,offset=0,verbosity=0):
+
+    files_path ='/home/afsari/gpc_SNEC/'
+    os.chdir(files_path)
+    output_path=filename+'/output/T_eff.dat'
+    output_out = filename + '/output/T_eff_edit.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        temp = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
+    ax=plt.subplot(311)
+    output_info = filename + '/output/info.dat'
+    f_info = open(output_info, 'r')
+    for line in f_info:
+        if 'Time of breakout' in line:
+            line = line.strip('Time of breakout =')
+            line = line.strip('seconds\n')
+            line = line.strip()
+            t_BO = float(line)
+    temp[:,0]=temp[:,0]-t_BO
+    filename1='s14.6_1020_K_9.00E+17'
+    files_path ='/home/afsari/gpc_SNEC/'
+    os.chdir(files_path)
+    output_path=filename1+'/output/T_eff.dat'
+    output_out = filename1 + '/output/T_eff_edit1.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        temp1 = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
+    output_info = filename1 + '/output/info.dat'
+    f_info = open(output_info, 'r')
+    for line in f_info:
+        if 'Time of breakout' in line:
+            line = line.strip('Time of breakout =')
+            line = line.strip('seconds\n')
+            line = line.strip()
+            t_BO1 = float(line)
+    temp1[:,0]=temp1[:,0]-t_BO1
+    plt.plot(temp[:,0]/84000.0-offset,temp[:,1],label=r'Model no CSM',color='blue',lw=2)
+    plt.plot(temp1[:, 0] / 84000.0 - offset, temp1[:, 1],'--', label=r'Model with CSM', color='green', lw=2)
+    files_path ='/home/afsari/PycharmProjects/kspSN'
+    os.chdir(files_path)
+    temp_obs = np.genfromtxt("phot_csv/temperature.csv", delimiter=',')
+    plt.scatter(temp_obs[:,0],temp_obs[:,1],label='SED Temperature',color='red',s=1.5)
+    ax.set_xlim([0, 120])
+    ax.set_ylim([3000, 18000])
+    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.xaxis.set_minor_locator(AutoMinorLocator(10))
+    ax.xaxis.set_tick_params(width=1.5)
+    ax.yaxis.set_tick_params(width=1.5)
+    plt.subplots_adjust(wspace=0, hspace=0)
+    #plt.title('Model ' + filename)
+    ax.legend(loc='upper right', ncol=1, fancybox=True, fontsize=12)
+    plt.ylabel(r'$T [k]$')
+    files_path ='/home/afsari/gpc_SNEC/'
+    os.chdir(files_path)
+    output_path=filename+'/output/vel_photo.dat'
+    output_out = filename + '/output/vel_photo_edit.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        temp = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
+    temp[:,0]=temp[:,0]-t_BO
+    ax=plt.subplot(312)
+    output_path=filename1+'/output/vel_photo.dat'
+    output_out = filename1 + '/output/vel_photo_edit1.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        temp1 = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
+    temp1[:,0]=temp1[:,0]-t_BO1
+    plt.plot(temp[:,0]/84000.0-offset,temp[:,1]/1e8,label='_nolegend_',color='blue',lw=2)
+    plt.plot(temp1[:,0]/84000.0-offset,temp1[:,1]/1e8,'--',label='_nolegend_',color='green',lw=2)
+    plt.errorbar(93, 7960.778936/1e3,yerr=  60.23038947/1e3,label=r'$H\alpha$', color='yellow', fmt='d')
+    plt.errorbar(93,5860.152232/1e3,yerr=  16.84773558/1e3,label=r'$H\beta$', color='gray', fmt='p')
+    plt.errorbar(93, 5452.050691/1e3,yerr=  45.91299733/1e3,label=r'$H\gamma$', color='magenta', fmt='h')
+    plt.errorbar(93, 2798.334687/1e3,yerr=  16.84773558/1e3,label='Fe II 4924', color='pink', fmt='v')
+    plt.errorbar(93, 3133.97768/1e3,yerr=  84.5273615/1e3,label='Fe II 5018', color='green', fmt='^')
+    plt.errorbar(93,3192.222867/1e3,yerr=  63.55/1e3,label='Fe II 5169', color='red', fmt='s')
+
+
+    ax.set_xlim([0, 120])
+    ax.set_ylim([0.2, 12.4])
+    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax.xaxis.set_minor_locator(AutoMinorLocator(10))
+    ax.xaxis.set_tick_params(width=1.5)
+    ax.yaxis.set_tick_params(width=1.5)
+    plt.subplots_adjust(wspace=0, hspace=0)
+    ax.legend(loc='upper right', ncol=3, fancybox=True, fontsize=12)
+    plt.ylabel(r' $v[10^{3}  km \ s^{-1}]$')
+    plt.xlabel(r'Time [days]')
+    output_path=filename+'/output/lum_observed.dat'
+    output_out = filename + '/output/lum_observed_edit.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        temp = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
+    ax=plt.subplot(313)
+    temp[:,0]=temp[:,0]-t_BO
+    output_path=filename1+'/output/lum_observed.dat'
+    output_out = filename1 + '/output/lum_observed_edit.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        temp1 = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
+    temp1[:,0]=temp1[:,0]-t_BO1
+    plt.plot(temp[:,0]/84000.0-offset,np.log10(temp[:,1]),label='Model no CSM',color='blue',lw=2)
+    plt.plot(temp1[:, 0] / 84000.0 - offset, np.log10(temp1[:, 1]), '--',label='Model with CSM', color='green', lw=2)
+    temp_obs = np.genfromtxt("/home/afsari/PycharmProjects/kspSN/phot_csv/Lbol.csv", delimiter=' ')
+    plt.scatter(temp_obs[:,0],np.log10(temp_obs[:,1]),label='Observation',color='red',s=1.5)
+    ax.set_xlim([0, 120])
+    ax.set_ylim([41.7, 43.3])
+    ax.legend(loc='upper right', ncol=1, fancybox=True, fontsize=12)
+    plt.ylabel(r'$\log L[erg \ s^{-1}]$')
+    plt.xlabel('Time [days]')
+    ax = [plt.subplot(3, 1, i + 1) for i in range(3)]
+    ax[0].set_xticklabels([])
+    ax[1].set_xticklabels([])
+    ax[2].yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax[2].xaxis.set_minor_locator(AutoMinorLocator(10))
+    ax[2].xaxis.set_tick_params(width=1.5)
+    ax[2].yaxis.set_tick_params(width=1.5)
+    plt.tight_layout()
+    plt.subplots_adjust(wspace=0, hspace=0)
     plt.show()
     return
 
@@ -58,7 +286,17 @@ def SNECtemp(filename,offset=0,verbosity=0):
     files_path ='/home/afsari/gpc_SNEC/'
     os.chdir(files_path)
     output_path=filename+'/output/T_eff.dat'
-    temp = np.genfromtxt(output_path, delimiter='  ')
+    output_out = filename + '/output/T_eff_edit.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        temp = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
     ax=plt.subplot(111)
     output_info = filename + '/output/info.dat'
     f_info = open(output_info, 'r')
@@ -69,7 +307,7 @@ def SNECtemp(filename,offset=0,verbosity=0):
             line = line.strip()
             t_BO = float(line)
     temp[:,0]=temp[:,0]-t_BO
-    plt.plot(temp[:,0]/84000.0-offset,temp[:,1],label='Model T_{eff}',color='blue')
+    plt.plot(temp[:,0]/84000.0-offset,temp[:,1],label='Model T_{\text{eff}}',color='blue')
     files_path ='/home/afsari/PycharmProjects/kspSN'
     os.chdir(files_path)
     temp_obs = np.genfromtxt("phot_csv/temperature.csv", delimiter=',')
@@ -78,10 +316,47 @@ def SNECtemp(filename,offset=0,verbosity=0):
     ax.set_ylim([3000, 18000])
     plt.ylabel(r'Temperature [k]')
     plt.xlabel('Time [days]')
-    plt.title('Model '+filename)
+    #plt.title('Model '+filename+'}')
     ax.legend(loc='upper right', ncol=1, fancybox=True, fontsize=12)
     plt.show()
     return
+
+def SNECVelocity(filename,offset=0,verbosity=0):
+    files_path ='/home/afsari/gpc_SNEC/'
+    os.chdir(files_path)
+    output_path=filename+'/output/vel_photo.dat'
+    output_out = filename + '/output/vel_photo_edit.dat'
+    try:
+        fr = open(output_path, 'r')
+        fw = open(output_out, 'w')
+        for line in fr:
+            fw.write(' '.join(line.split()) + '\n')
+        fr.close()
+        fw.close()
+        temp = np.genfromtxt(output_out, delimiter=' ')
+    except:
+        print "error"
+    ax=plt.subplot(111)
+    output_info = filename + '/output/info.dat'
+    f_info = open(output_info, 'r')
+    for line in f_info:
+        if 'Time of breakout' in line:
+            line = line.strip('Time of breakout =')
+            line = line.strip('seconds\n')
+            line = line.strip()
+            t_BO = float(line)
+    print temp
+    temp[:,0]=temp[:,0]-t_BO
+    plt.plot(temp[:,0]/84000.0-offset,np.log10(temp[:,1]/1e5),label='Model v_{phot}',color='blue')
+    ax.set_xlim([0, 110])
+    ax.set_ylim([3, 4])
+    plt.ylabel(r'\Log Velocity [cm/s]')
+    plt.xlabel('Time [days]')
+    #plt.title('Model '+filename)
+    ax.legend(loc='upper right', ncol=1, fancybox=True, fontsize=12)
+    plt.show()
+    return
+
 
 def SNECluminosity(filename,offset=0,verbosity=0):
     files_path ='/home/afsari/gpc_SNEC/'
@@ -105,6 +380,7 @@ def SNECluminosity(filename,offset=0,verbosity=0):
     # plt.scatter(temp_obs[:,0],temp_obs[:,1],label='SED Temperature',color='red',s=1.5)
     ax.set_xlim([0, 110])
     ax.set_ylim([42, 43])
+    plt.rc('text', usetex=True)
     plt.ylabel(r'Luminosity [ers/s]')
     plt.xlabel('Time [days]')
     plt.title('Model '+filename)
@@ -174,6 +450,7 @@ def SNECanalysis( verbosity=0 ):
     mass = np.arange(11, 28, 0.6)
     ni56_mixing = [3, 5, 7]
     energy = np.arange(4e49, 1.96e51, 0.06e51)
+    t_p=80
     file_err=[]
     file_uncomp=[]
     file_offset=[]
@@ -184,12 +461,19 @@ def SNECanalysis( verbosity=0 ):
     for z in mass:
         for j in ni56_mixing:
             for k in energy:
-                chi2 = np.ones(shape=(1,5))*10000
+                chi2 = np.ones(shape=(1,3))*10000
                 dir_name = 's%(num)2.1f_ni56_%(mixing)i_efin_%(efin).2E' % {"num": z, "mixing": j, "efin": k}
                 output_path = dir_name + '/output/magnitudes.dat'
+                output_out = dir_name + '/output/magnitudes_output.dat'
                 output_info = dir_name + '/output/info.dat'
                 try:
-                    mags = np.genfromtxt(output_path, delimiter='  ')
+                    fr = open(output_path, 'r')
+                    fw = open(output_out, 'w')
+                    for line in fr:
+                        fw.write(' '.join(line.split()) + '\n')
+                    fr.close()
+                    fw.close()
+                    mags = np.genfromtxt(output_out, delimiter=' ')
                     f_info = open(output_info, 'r')
                     for line in f_info:
                         if 'Time of breakout' in line:
@@ -200,11 +484,12 @@ def SNECanalysis( verbosity=0 ):
                 except:
                     file_err.append(dir_name)
                     continue
+                mags = mags[~np.isnan(mags).any(axis=1)]
                 mags[:, 0]=mags[:, 0]-t_BO
-                if np.max(mags[:,0]/84000.0) < np.max(u_t):
-                    print "B:", dir_name,np.max(mags[:,0]/84000.0)
-                    file_uncomp.append(dir_name)
-                    continue
+                # if np.max(mags[:,0]/84000.0) < np.max(u_t):
+                #     print "B:", dir_name,np.max(mags[:,0]/84000.0)
+                #     file_uncomp.append(dir_name)
+                #     continue
                 if np.max(mags[:,0]/84000.0) < np.max(v_t):
                     print "V:", dir_name
                     file_uncomp.append(dir_name)
@@ -213,30 +498,40 @@ def SNECanalysis( verbosity=0 ):
                     file_uncomp.append(dir_name)
                     print "I:", dir_name
                     continue
-                for count,offset in enumerate(np.arange(0,2.5,0.5)):
+                for count,offset in enumerate(np.arange(0,1.5,0.5)):
                     tt=(mags[:,0]/84000.0)-offset
-                    if np.max(tt) < np.max(u_t):
-                        file_offset.append(dir_name)
-                        continue
+                    # if np.max(tt) < np.max(u_t):
+                    #     file_offset.append(dir_name)
+                    #     continue
                     if np.max(tt) < np.max(v_t):
                         file_offset.append(dir_name)
                         continue
                     if np.max(tt) < np.max(i_t):
                         file_offset.append(dir_name)
                         continue
+                    # try:
+                    #     tck = interpolate.splrep(tt[tt>0], mags[:, 9][tt>0], s=0.00001)
+                    # except:
+                    #     file_fit.append(dir_name)
+                    #     break
+                    # magnew_u = interpolate.splev(u_t[u_t>t_p], tck, der=0)
                     try:
-                        tck = interpolate.splrep(tt[tt>0], mags[:, 9][tt>0], s=0.00001)
+                        tck = interpolate.splrep(tt[tt>0], mags[:, 10][tt>0], s=0.1)
                     except:
-                        file_fit.append(dir_name)
-                        break
-                    magnew_u = interpolate.splev(u_t, tck, der=0)
-                    tck = interpolate.splrep(tt[tt>0], mags[:, 10][tt>0], s=0.00001)
-                    magnew_v = interpolate.splev(v_t, tck, der=0)
-                    tck = interpolate.splrep(tt[tt>0], mags[:, 12][tt>0], s=0.00001)
-                    magnew_i = interpolate.splev(i_t, tck, der=0)
+                        file_err.append(dir_name)
+                        print dir_name,offset
+                        continue
+                    magnew_v = interpolate.splev(v_t[v_t>t_p], tck, der=0)
+                    try:
+                        tck = interpolate.splrep(tt[tt>0], mags[:, 12][tt>0], s=0.1)
+                    except:
+                        file_err.append(dir_name)
+                        print dir_name,offset
+                        continue
+                    magnew_i = interpolate.splev(i_t[i_t>t_p], tck, der=0)
                     #chi2[0,count]=np.sum(np.divide(np.square(magnew_u-u),np.square(ue)))+ \
                     chi2[0, count] = \
-                        np.sum(np.divide(np.square(magnew_v - v), np.square(ve)))+np.sum(np.divide(np.square(magnew_i - i), np.square(ie)))
+                        np.sum(np.divide(np.square(magnew_v - v[v_t>t_p]), np.square(ve[v_t>t_p])))+np.sum(np.divide(np.square(magnew_i - i[i_t>t_p]), np.square(ie[i_t>t_p])))
                 chi2_min.append(np.min(chi2))
                 t_offset.append(np.argmin(chi2)*0.5)
                 keys.append(dir_name)
@@ -247,22 +542,22 @@ def SNECanalysis( verbosity=0 ):
     print "error files:",len(file_err)
     print "uncomplete:", len(file_uncomp)
     print "offsetshort:",len(file_offset)
-    errorfiles = open('/home/afsari/PycharmProjects/kspSN/logs/ErrorFile.txt', 'w')
+    errorfiles = open('/home/afsari/PycharmProjects/kspSN/logs/ErrorFile_80.txt', 'w')
     for item in file_err:
         errorfiles.write("%s\n" % item)
-    uncompfiles = open('/home/afsari/PycharmProjects/kspSN/logs/UnCompFile.txt', 'w')
+    uncompfiles = open('/home/afsari/PycharmProjects/kspSN/logs/UnCompFile_80.txt', 'w')
     for item in file_uncomp:
         uncompfiles.write("%s\n" % item)
-    offsetfiles = open('/home/afsari/PycharmProjects/kspSN/logs/OffsetFile.txt', 'w')
+    offsetfiles = open('/home/afsari/PycharmProjects/kspSN/logs/OffsetFile_80.txt', 'w')
     for item in file_offset:
         offsetfiles.write("%s\n" % item)
-    w = csv.writer(open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_1.csv", "w"))
-    print hash_chi.items()
+    w = csv.writer(open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_80.csv", "w"))
+    #print hash_chi.items()
     count=0
     for key, val in hash_chi.items():
         w.writerow([key, val, hash_offset[key]])
     print file_fit
-    print hash_offset['s18.8_ni56_7_efin_1.36E+51']
+    #print hash_offset['s18.8_ni56_7_efin_1.36E+51']
     return best_fit, best_offset
 
 def SNEC_csm_analysis( verbosity=0 ):
@@ -270,7 +565,7 @@ def SNEC_csm_analysis( verbosity=0 ):
     t_offset=[]
     chi2_min=[]
     keys=[]
-    name = 's18.8'
+    name = 's14.6'
     u_t, u, ue, v_t, v, ve, i_t, i, ie=getLC()
     files_path ='/home/afsari/gpc_SNEC/'
     os.chdir(files_path)
@@ -278,6 +573,7 @@ def SNEC_csm_analysis( verbosity=0 ):
     solar_mass = 1.99e33
     #model_radius = 72567442288907.27
     model_radius = 0.5694193820696878e014
+    #model_radius=86493739248921.08
     model_radius_solar = model_radius / solar_radius
     rad = np.arange(model_radius_solar+2, 3800, 100)
     rad_solar = rad * solar_radius
@@ -293,6 +589,7 @@ def SNEC_csm_analysis( verbosity=0 ):
         for j in K:
             chi2 = np.ones(shape=(1,5))*10000
             dir_name ='s%(num)2.1f_%(radius)i_K_%(cons).2E' % {"num": 14.6, "radius": np.floor(z), "cons": j}
+            print dir_name
             output_path = dir_name + '/output/magnitudes.dat'
             output_out = dir_name + '/output/magnitudes_output.dat'
             output_info = dir_name + '/output/info.dat'
@@ -305,6 +602,7 @@ def SNEC_csm_analysis( verbosity=0 ):
                 fw.close()
                 mags = np.genfromtxt(output_out, delimiter=' ')
                 f_info = open(output_info, 'r')
+                t_BO=0
                 for line in f_info:
                     if 'Time of breakout' in line:
                         line = line.strip('Time of breakout =')
@@ -352,8 +650,8 @@ def SNEC_csm_analysis( verbosity=0 ):
                 magnew_i = interpolate.splev(i_t, tck, der=0)
                 #chi2[0,count]=np.sum(np.divide(np.square(magnew_u-u),np.square(ue)))+ \
                 chi2[0, count] =(np.sum(np.divide(np.square(magnew_v - v), np.square(ve)))+np.sum(np.divide(np.square(magnew_i - i), np.square(ie))))
-            chi2_min.append(np.nanmin(chi2))
-            t_offset.append(np.nanargmin(chi2)*0.5)
+            chi2_min.append(np.min(chi2))
+            t_offset.append(np.argmin(chi2)*0.5)
             keys.append(dir_name)
     print keys
     hash_chi = {k: v for k, v in zip(keys, chi2_min)}
@@ -364,16 +662,16 @@ def SNEC_csm_analysis( verbosity=0 ):
     print "error files:",len(file_err)
     print "uncomplete:", len(file_uncomp)
     print "offsetshort:",len(file_offset)
-    errorfiles = open('/home/afsari/PycharmProjects/kspSN/logs/ErrorFile_csm.txt', 'w')
+    errorfiles = open('/home/afsari/PycharmProjects/kspSN/logs/ErrorFile_csm_14.txt', 'w')
     for item in file_err:
         errorfiles.write("%s\n" % item)
-    uncompfiles = open('/home/afsari/PycharmProjects/kspSN/logs/UnCompFile_csm.txt', 'w')
+    uncompfiles = open('/home/afsari/PycharmProjects/kspSN/logs/UnCompFile_csm_14.txt', 'w')
     for item in file_uncomp:
         uncompfiles.write("%s\n" % item)
-    offsetfiles = open('/home/afsari/PycharmProjects/kspSN/logs/OffsetFile_csm.txt', 'w')
+    offsetfiles = open('/home/afsari/PycharmProjects/kspSN/logs/OffsetFile_csm_14.txt', 'w')
     for item in file_offset:
         offsetfiles.write("%s\n" % item)
-    w = csv.writer(open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_csm.csv", "w"))
+    w = csv.writer(open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_csm_14.csv", "w"))
     print hash_chi.items()
     count=0
     for key, val in hash_chi.items():
@@ -394,11 +692,11 @@ if __name__ == "__main__":
     if len(sys.argv)==1:
         parser.add_argument("-v", "--verbosity", action="count", default=0)
         args = parser.parse_args()
-        best_fit, best_offset=SNEC_csm_analysis(verbosity=args.verbosity)
+        best_fit, best_offset=SNECanalysis(verbosity=args.verbosity)
         print best_fit, best_offset
     else:
         parser.add_argument("filename", type=str, help="simulation name")
         parser.add_argument("-f", "--offset", type=float, default=0)
         parser.add_argument("-v", "--verbosity", action="count", default=0)
         args = parser.parse_args()
-        SNECplot(args.filename,offset=args.offset)
+        SNEC_all(args.filename,offset=args.offset)

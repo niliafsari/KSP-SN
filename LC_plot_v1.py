@@ -51,7 +51,7 @@ plt.errorbar(data_V[:,4][(data_V[:,9] < data_V[:,11])],data_V[:,9][(data_V[:,9] 
 plt.errorbar(data_I[:,4][(data_I[:,9] < data_I[:,11])],data_I[:,9][(data_I[:,9] < data_I[:,11])],yerr=data_I[:,10][(data_I[:,9] < data_I[:,11])],color='red',label='V',fmt='^')
 #plt.scatter(data_I[:,4][(data_I[:,9] > data_I[:,11])& (data_I[:,4]<723.5)],data_I[:,11][(data_I[:,9] > data_I[:,11])& (data_I[:,4]<723.5)],color='red', marker='D',label='V no detection')
 plt.axis([720-365,855-365,18,23.2])
-
+ax.grid()
 plt.ylabel('mag')
 ax.legend(loc='best',ncol=3, fancybox=True,fontsize=12)
 ax.invert_yaxis()
@@ -98,7 +98,7 @@ ax.legend(loc='best',ncol=3, fancybox=True,fontsize=12)
 #    findSN(n.replace('.nh.magcalc.cat', '.nh.fits'), 1, '/home/afsari/PycharmProjects/kspSN/corrupted/cantopen/')
 
 plt.tick_params(labelsize=20)
-
+ax.grid()
 
 bin_factor = 2
 
@@ -164,6 +164,7 @@ plt.errorbar(data_Inobin[:,4],data_Inobin[:,9],yerr=data_Inobin[:,10],color='red
 plt.errorbar(binnedB[:,0],binnedB[:,2],yerr=binnedB[:,3],color='blue',label='B mag',fmt='v')
 plt.errorbar(binnedV[:,0],binnedV[:,2],yerr=binnedV[:,3],color='green',label='V mag',fmt='>')
 plt.errorbar(binnedI[:,0],binnedI[:,2],yerr=binnedI[:,3],color='red',label='I mag',fmt='^')
+ax.grid()
 ebv=0.0290
 mag = np.zeros(shape=(0, 5))
 for i,dat in enumerate(data_Bnobin[:,4]):

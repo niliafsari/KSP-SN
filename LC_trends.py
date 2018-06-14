@@ -19,7 +19,7 @@ current_path=os.path.dirname(os.path.abspath(__file__))
 matplotlib.rcParams.update({'font.size': 18})
 
 
-band='B'
+band='I'
 
 files=['N2188-B_v2_edit.csv','N2188-V_v2_edit.csv','N2188-I_v2_edit.csv',
        'N2188-B_v12_edit.csv','N2188-V_v12_edit.csv','N2188-I_v12_edit.csv',
@@ -164,11 +164,11 @@ else:
 #data_B_v1[:,4]=data_B_v1[:,4]
 #data_B_v1[:,4]=data_B_v1[:,4]-365
 ax = plt.subplot(313)
-cond=((data_B_v1[:,2]==0))
+cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='grey',label='S. Africa',fmt='v')
-cond=((data_B_v1[:,2]==1))
+cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==1))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='cyan',label='Chile',fmt='<')
-cond=( (data_B_v1[:,2]==2))
+cond=( (data_B_v1[:,9] < data_B_v1[:,11])&  (data_B_v1[:,2]==2))
 plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond],color='yellow',label='Australia',fmt='^')
 
 # cond=((data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==0))
@@ -179,11 +179,11 @@ plt.errorbar(data_B_v1[:,4][cond],data_B_v1[:,9][cond],yerr=data_B_v1[:,10][cond
 # plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,9][cond],color='yellow',label='Australia',marker='^',edgecolor='black')
 
 
-cond=( (data_B_v1[:,2]==0))
+cond=( (data_B_v1[:,9] < data_B_v1[:,11])&  (data_B_v1[:,2]==0))
 plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='grey', marker='.',label='lim S')
-cond=( (data_B_v1[:,2]==1))
+cond=( (data_B_v1[:,9] < data_B_v1[:,11])& (data_B_v1[:,2]==1))
 plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='cyan', marker='.',label='lim C')
-cond=( (data_B_v1[:,2]==2))
+cond=( (data_B_v1[:,9] < data_B_v1[:,11])&  (data_B_v1[:,2]==2))
 plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='yellow', marker='.',label='lim A')
 
 #plt.scatter(data_B_v1[:,4][(data_B_v1[:,9] > data_B_v1[:,11])& (data_B_v1[:,4]<723.5)],data_B_v1[:,11][(data_B_v1[:,9] > data_B_v1[:,11])& (data_B_v1[:,4]<723.5)],color='b', marker='D',label='B no detection')
@@ -208,8 +208,7 @@ plt.scatter(data_B_v1[:,4][cond],data_B_v1[:,11][cond],color='yellow', marker='.
 x=np.arange(650-365,870-365,0.5)
 y=(1+np.cos(2*np.pi*(x-742.881+365)/29.5306))/2
 ax.fill_between(x, 18,25, where= (y>0.8), facecolor='pink',alpha=0.5)
-
-#plt.axis([700-365,870-365,18,29])
+plt.axis([720-365,870-365,18,25])
 plt.xlabel('time [days]')
 plt.ylabel('mag')
 plt.title('no subtraction')
