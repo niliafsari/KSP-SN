@@ -16,7 +16,7 @@ coef = {'B': 4.107, 'V': 2.682, 'I': 1.516, 'i': 1.698}
 location_sexagesimal='-34:08:28.22'
 location_deg='92.653175:-34.141172'
 rad_pixel=10
-rad_arcsec=3.96
+rad_arcsec=9.36
 
 ebv=0.029
 redshift=0.043

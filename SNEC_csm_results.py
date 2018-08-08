@@ -6,7 +6,7 @@ import matplotlib
 
 
 
-my_file = open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_csm_21.2.csv", "r")
+my_file = open("/home/afsari/PycharmProjects/kspSN/phot_csv/goodness_csm_niagara_0.1.csv", "r")
 reader = csv.reader(my_file, delimiter=',')
 my_list = list(reader)
 my_file.close()
@@ -48,6 +48,7 @@ solar_mass = 1.99e33
 #model_radius = 72567442288907.27
 model_radius = 0.5694193820696878e014
 model_radius = 86493739248921.08
+model_radius =   72567442288907.27
 model_radius_solar = model_radius / solar_radius
 rad = np.arange(model_radius_solar + 2, 3800, 100)
 rad_solar = rad * solar_radius
@@ -67,7 +68,7 @@ print data[f3,0],data[f3,1]*scale,data[f3,2],data[f3,3],data[f3,4], "hi"
 #print mydict_rev
 for u,i in enumerate(x):
     for v,j in enumerate(y):
-        dir_name = 's%(num)2.1f_%(radius)i_K_%(cons).2E' % {"num": 21.2, "radius": np.floor(i), "cons": j}
+        dir_name = 's%(num)2.1f_%(radius)i_K_%(cons).2E_mni0.1' % {"num": 18.8, "radius": np.floor(i), "cons": j}
         try:
             s= mydict_rev[str(dir_name)], dir_name
             if np.all(np.in1d( [int(mydict_rev[dir_name])],data[:, 0]))==False:
@@ -90,9 +91,9 @@ import matplotlib.patches as mpatch
 
 
 cb=plt.colorbar(sc)
-cb.set_label(r'\text{ln} \chi^2 / \chi_\min^2', rotation=270)
+cb.set_label(r'$\text{ln} \chi^2 / \chi_\min^2$', rotation=270)
 #plt.title(r"^{56} \text{Ni}_\text{mixing}=3 [M_\odot]")
-plt.xlabel(r'R_{CSM} [R_\odot]')
+plt.xlabel(r'$R_{CSM} [R_\odot]$')
 plt.ylabel('K')
 
 

@@ -23,10 +23,11 @@ with open("logs/sn_names.txt") as f:
 
 file_names = [line.rstrip('\n') for line in file_names]
 files_count=len(file_names)
-Band='V'
+Band='I'
 coef = {'B': 3.626, 'V': 2.742, 'I': 1.505, 'i': 1.698}
 coef = {'B': 4.315, 'V': 3.315, 'I': 1.940, 'i': 2.086}
 for i,sn_name in enumerate(file_names):
+    print "name",sn_name
     mag = np.zeros(shape=(0, 5))
     location='/home/afsari/PycharmProjects/kspSN/SN_json/'
     print os.path.isfile(location+sn_name+'.json')
@@ -46,7 +47,7 @@ for i,sn_name in enumerate(file_names):
     for dat in data[sn_name]["photometry"]:
         try:
             if sn_name=='SN1987A':
-                ebv=0.2
+                ebv=0.19
             if "e_magnitude" in dat:
                 error=float(dat["e_magnitude"])
             else:
@@ -54,9 +55,12 @@ for i,sn_name in enumerate(file_names):
             if dat["band"]==Band and Band != 'I':
                 if sn_name=='SN2014cx':
                     add = np.concatenate(([dat["time"], dat["magnitude"], error], [deredMag(float(dat["magnitude"]), float(ebv), coef[Band])-31.27,error]))
+                if sn_name == 'SN1987A':
+                    add = np.concatenate(([dat["time"], dat["magnitude"], error],
+                                          [deredMag(float(dat["magnitude"]), float(ebv), coef[Band]) - 18.56, error]))
                 elif sn_name=='SN199em' and dat["source"]=="1":
                     add = np.concatenate(([dat["time"], dat["magnitude"], error
-                                      , deredMag(float(dat["magnitude"]), float(ebv), coef[Band])-30.56,error]))
+                                      , deredMag(float(dat["magnitude"]), float(ebv), coef[Band])-29.46,error]))
                 else:
                     add = np.concatenate(([dat["time"], dat["magnitude"], error]
                                       , absMag(deredMag(float(dat["magnitude"]), float(ebv), coef[Band]),
@@ -74,9 +78,13 @@ for i,sn_name in enumerate(file_names):
                         add = np.concatenate(([dat["time"], dat["magnitude"], error],
                                                [deredMag(float(dat["magnitude"]), float(ebv), coef[Band]) - 31.27,
                                                error]))
+                    if sn_name == 'SN1987A':
+                        add = np.concatenate(([dat["time"], dat["magnitude"], error],
+                                               [deredMag(float(dat["magnitude"]), float(ebv), coef[Band]) - 18.56,
+                                               error]))
                     elif sn_name == 'SN1999em' and dat["source"]=="1":
                         add = np.concatenate(([dat["time"], dat["magnitude"], error
-                            , deredMag(float(dat["magnitude"]), float(ebv), coef[Band]) - 30.56, error]))
+                            , deredMag(float(dat["magnitude"]), float(ebv), coef[Band]) -29.46, error]))
                     else:
                         add = np.concatenate(([dat["time"], dat["magnitude"], error]
                                           , absMag(deredMag(float(dat["magnitude"]), float(ebv), coef[Band]),

@@ -166,7 +166,7 @@ ax1.errorbar(magV[:, 0][magV[:, 3]==2] - u, magV[:, 1][magV[:, 3]==2], yerr= mag
 magI=np.delete(magI[:],np.where(magI[:,1]<18.5),0)
 magI=np.delete(magI[:],np.where((magI[:,1]>18.89) & ((magI[:, 0] - u)<72 ) & ((magI[:, 0] - u)>30)),0)
 
-ax1.errorbar(magI[:, 0][magI[:, 3]==0] - u, magI[:, 1][magI[:, 3]==0] -1, yerr= magI[:, 2][magI[:, 3]==0] , color='red', label='I+1',fmt='o',markersize=6,markeredgecolor='black',
+ax1.errorbar(magI[:, 0][magI[:, 3]==0] - u, magI[:, 1][magI[:, 3]==0] -1, yerr= magI[:, 2][magI[:, 3]==0] , color='red', label='I-1',fmt='o',markersize=6,markeredgecolor='black',
              markeredgewidth=1.2)
 ax1.errorbar(magI[:, 0][magI[:, 3]==1] - u, magI[:, 1][magI[:, 3]==1] -1, yerr= magI[:, 2][magI[:, 3]==1] , color='red',label='_nolegend_',fmt='d',markersize=6,markeredgecolor='black',
              markeredgewidth=1.2)
@@ -180,7 +180,7 @@ ax1.set_xlim([-10, 150])
 ax1.set_ylim([17, 26])
 plt.gca().invert_yaxis()
 plt.tight_layout()
-plt.xlabel('Time from explosion [days]')
+plt.xlabel('MJD-57746.18 [days]')
 plt.ylabel('Apparent Magnitude')
 ax1.legend(loc='lower right',ncol=1, fancybox=True,fontsize=14, frameon=False)
 #ax1.spines[side].set_linewidth(size)
@@ -213,7 +213,7 @@ ax.scatter(limV[:, 4] - u, limV[:, 11] , color='green',facecolors='none',label='
 #ax1.scatter(limV[:, 4] - u, limV[:, 9] , color='green',facecolors='none',label='_nolegend_',marker='o',s=18, lw=1.2)
 
 
-ax.errorbar(magI[:, 0][magI[:, 3]==0] - u, magI[:, 1][magI[:, 3]==0] -1, yerr= magI[:, 2][magI[:, 3]==0] , color='red', label='I+1',fmt='o',markersize=6,markeredgecolor='black',
+ax.errorbar(magI[:, 0][magI[:, 3]==0] - u, magI[:, 1][magI[:, 3]==0] -1, yerr= magI[:, 2][magI[:, 3]==0] , color='red', label='I-1',fmt='o',markersize=6,markeredgecolor='black',
              markeredgewidth=1.2)
 ax.errorbar(magI[:, 0][magI[:, 3]==1] - u, magI[:, 1][magI[:, 3]==1] -1, yerr= magI[:, 2][magI[:, 3]==1] , color='red',label='_nolegend_',fmt='d',markersize=6,markeredgecolor='black',
              markeredgewidth=1.2)
@@ -241,7 +241,9 @@ for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
 # plt.annotate('i/I', xy=(0.85, 0.75), color='red', xycoords='axes fraction')
 # plt.annotate('V', xy=(0.85, 0.45), color='green', xycoords='axes fraction')
 # plt.annotate('B', xy=(0.85, 0.15), color='blue', xycoords='axes fraction')
-plt.show()
+fig = matplotlib.pyplot.gcf()
+fig.set_size_inches(9, 5.7, forward=True)
 plt.tight_layout()
-plt.savefig(current_path+'/plots/LC.png')
+fig.savefig(current_path+'/plots/p_lc.pdf')
+plt.show()
 
