@@ -23,13 +23,11 @@ abs_mag=np.zeros((data.shape[0],2))
 
 
 for i in xrange(0,data.shape[0]):
-    abs_mag[i,0], abs_mag[i,1] = absMag(data[i,9],0.043,data[i,10],0.002)
-
+    abs_mag[i,0], abs_mag[i,1] = absMag(data[i,9],0.042,data[i,10],0.002)
+    print data[i, 9]-abs_mag[i,0]
 print abs_mag.shape
 
 data=np.append(data[:,0:12], abs_mag, axis=1)
-
-print data.shape
 
 data_list=data.tolist()
 for l in data_list:

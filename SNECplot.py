@@ -75,12 +75,12 @@ def SNECplot(filename,offset=0,verbosity=0):
 
     ax=plt.subplot(211)
 
-    plt.plot(mags[:,0]/84000.0-offset,mags[:,9],label=r'$B$ w/o CSM',color='blue',lw=2)
-    plt.plot(mags[:,0]/84000.0-offset,mags[:,10],label=r'$V$ w/o CSM',color='green',lw=2)
-    plt.plot(mags[:,0]/84000.0-offset,mags[:,12],label=r'$I$ w/o CSM',color='red',lw=2)
-    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,9],'--',label=r'$B$ w/ CSM',color='blue',lw=2)
-    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,10],'--',label=r'$V$ w/ CSM',color='green',lw=2)
-    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,12],'--',label=r'$I$ w/ CSM',color='red',lw=2)
+    plt.plot(mags[:,0]-offset,mags[:,9],label=r'$B$ w/o CSM',color='blue',lw=2)
+    plt.plot(mags[:,0]-offset,mags[:,10],label=r'$V$ w/o CSM',color='green',lw=2)
+    plt.plot(mags[:,0]-offset,mags[:,12],label=r'$I$ w/o CSM',color='red',lw=2)
+    plt.plot(mags1[:,0]-offset,mags1[:,9],'--',label=r'$B$ w/ CSM',color='blue',lw=2)
+    plt.plot(mags1[:,0]-offset,mags1[:,10],'--',label=r'$V$ w/ CSM',color='green',lw=2)
+    plt.plot(mags1[:,0]-offset,mags1[:,12],'--',label=r'$I$ w/ CSM',color='red',lw=2)
     # tck = interpolate.splrep(mags[:,0]/84000.0-offset,mags[:,9], s=0)
     # tt = np.arange(0, 118, 0.2)
     # magnew = interpolate.splev(tt, tck, der=0)
@@ -95,7 +95,7 @@ def SNECplot(filename,offset=0,verbosity=0):
     ax.xaxis.set_minor_locator(AutoMinorLocator(10))
     ax.xaxis.set_tick_params(width=1.5)
     ax.yaxis.set_tick_params(width=1.5)
-    ax.set_xlim([0, 105])
+    #ax.set_xlim([0, 105])
     ax.set_ylim([-18.5, -15])
     ax.invert_yaxis()
 
@@ -125,8 +125,8 @@ def SNECplot(filename,offset=0,verbosity=0):
     # for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label] +
     #                  ax1.get_xticklabels() + ax1.get_yticklabels()):
     #     item.set_fontsize(13)
-    ax1.set_xlim([-1, 6])
-    ax1.set_ylim([-18, -15])
+    #ax1.set_xlim([-1, 6])
+    ax1.set_ylim([-18, -10])
 
     plt.xlabel('Time [days]')
     ax1.invert_yaxis()
@@ -284,6 +284,7 @@ def SNEC_all(filename,offset=0,verbosity=0):
     except:
         print "error"
     ax=plt.subplot(312)
+    t_BO=0
     temp[:,0]=temp[:,0]-t_BO
     files_path = '/home/afsari/gpc_SNEC/'
     #files_path = '/home/afsari/gpc_SNEC/'
@@ -302,14 +303,15 @@ def SNEC_all(filename,offset=0,verbosity=0):
         temp1 = np.genfromtxt(output_out, delimiter=' ')
     except:
         print "error"
+    t_BO1=0
     temp1[:,0]=temp1[:,0]-t_BO1
-    plt.plot(temp[:,0]/84000.0-offset,np.log10(temp[:,1]),label='Model without CSM',color='blue',lw=2)
-    plt.plot(temp1[:, 0] / 84000.0 - offset, np.log10(temp1[:, 1]), '--',label='Model with CSM', color='green', lw=2)
+    plt.plot(temp[:,0]-offset,np.log10(temp[:,1]),label='Model without CSM',color='blue',lw=2)
+    plt.plot(temp1[:, 0]  - offset, np.log10(temp1[:, 1]), '--',label='Model with CSM', color='green', lw=2)
     temp_obs = np.genfromtxt("/home/afsari/PycharmProjects/kspSN/phot_csv/Lbol.csv", delimiter=' ')
     print temp_obs
     plt.scatter(temp_obs[:,0],np.log10(temp_obs[:,1]),label='Observation',marker='o',s=55, facecolors='none',color='red', linewidth='2')
-    ax.set_xlim([0, 105])
-    ax.set_ylim([40, 43.7])
+    # ax.set_xlim([0, 105])
+    # ax.set_ylim([40, 43.7])
     ax.legend(loc='lower right', ncol=1, fancybox=True, fontsize=12)
     plt.ylabel(r'$\log \rm{L}[\rm{erg}~ \rm{s}^{-1}]$')
     #plt.xlabel('Time [days]')
@@ -754,4 +756,4 @@ if __name__ == "__main__":
         parser.add_argument("-f", "--offset", type=float, default=0)
         parser.add_argument("-v", "--verbosity", action="count", default=0)
         args = parser.parse_args()
-        SNECplot(args.filename,offset=args.offset)
+        SNEC_all(args.filename,offset=args.offset)

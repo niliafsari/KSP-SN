@@ -1,0 +1,15 @@
+import numpy as np
+import csv
+import matplotlib.pyplot as plt
+import matplotlib
+
+file='/home/afsari/PycharmProjects/kspSN/profile_s18.8_1142_efin_2.00E+17.short'
+
+dat=np.loadtxt(file)
+
+print dat
+num=np.shape(dat)[0]
+print np.shape(np.arange(1,num+1,1))
+print np.shape(dat)
+plt.plot(np.arange(1,num+1,1),np.log10(dat[:,4]))
+plt.show()

@@ -115,3 +115,9 @@ v3: with new subtraction (change normalization)
 v4: relax psf
 v5: relax psf + subtract with more subimages + new errors
 v6: relax psf + subtract with more subimages + old errors
+v7: aperture phot , aperture from relaxed psf
+v8: psfphot with cropped diff images
+v9: v2+ ap phot fixed aperture
+v10: same as v9 with more imgaes and AB mag converted to Vega mag for I band
+v11: v4+ psfcov + photometry on convolved images
+v12: new elliptical moffat fit in SNAP
