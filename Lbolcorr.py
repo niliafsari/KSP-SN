@@ -34,7 +34,7 @@ sn_name="KSPN2188_v1"
 
 magB = np.load("phot_csv/compiledSN_" + "B" + "_" + sn_name + ".npy")
 magB = magB.astype(np.float)
-sn1987a = np.genfromtxt ('1987a.csv', delimiter=",")
+sn1987a = np.genfromtxt ('phot_csv/1987a.csv', delimiter=",")
 u_t = magB[:, 0]
 u_t[u_t<370] = np.floor(u_t[u_t<370]*100)/100
 u_t[u_t>370]=np.floor(u_t[u_t>370])
@@ -275,13 +275,13 @@ for k, M_mag in enumerate(Mv):
         if (vi[k]>0.4):
             Mbol[k] = M_mag + 0.057 + 0.708 * (vi[k]) - 0.912 * (np.square(vi[k]))
         else:
-            Mbol[k] = M_mag -0.61 + 2.244 * (vi[k]) - 2.107 * (np.square(vi[k]))
+            Mbol[k] = M_mag-0.61 + 2.244 * (vi[k]) - 2.107 * (np.square(vi[k]))
 
     #V-R
 #        Mbol[k] = M_mag + 0.073 + 0.902 * (vi[k]) - 1.796 * (np.square(vi[k]))
 #       Mbol[k] = M_mag + 0.059 + 0.744 * (vi[k]) - 0.953 * (np.square(vi[k]))
         #Hamuy
-        #Mbol[k] = M_mag -1.3555 + 6.262 * (vi[k]) - 2.676 * (np.square(vi[k])) -22.973*np.power(vi[k],3) +35.542*np.power(vi[k],4)-15.34*np.power(vi[k],5)
+        # Mbol[k] = M_mag-1.3555 + 6.262 * (vi[k]) - 2.676 * (np.square(vi[k])) -22.973*np.power(vi[k],3) +35.542*np.power(vi[k],4)-15.34*np.power(vi[k],5)
         BC=Mbol[k]-M_mag
         print "BC", BC
         #Mbol[k] = M_mag - 0.7
@@ -289,7 +289,10 @@ for k, M_mag in enumerate(Mv):
     else:
         Mbol[k] = M_mag - 0.610 + 2.244 * vi[k] - 2.107 * (np.square(vi[k]))
     lbol_bc[k]=Lsun*np.power(10,((Msun-Mbol[k])/2.5))
+    # d=5.93684e+26
+    # d= 5.49868e+26
     #lbol_bc[k]=10**((-0.4*(BC+vv[k]+11.64))+np.log10(4*np.pi*((5.61e26)**2)))
+    #lbol_bc[k] = 10 ** ((-0.4 * (BC + vv[k] + 11.64)) + np.log10(4 * np.pi * ((d) ** 2)))
     #lbol_bc[k] =10**(-0.4*(Mbol[k]-71.197))
     print lbol_bc[k], M_mag, np.shape(vv_late)
     print vi_t[k],vi[k],Mbol[k],Mv[k],M_mag-vi[k],Mbol[k]-M_mag,lbol_bc[k],vi[k]

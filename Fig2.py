@@ -26,6 +26,7 @@ matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.rcParams['ytick.major.width'] = 2
 matplotlib.rcParams['ytick.minor.size'] = 2
 matplotlib.rcParams['ytick.minor.width'] = 1.5
+matplotlib.rc('text', usetex=True)
 current_path=os.path.dirname(os.path.abspath(__file__))
 matplotlib.rcParams.update({'font.size': 17})
 coef = {'B': 3.626, 'V': 2.742, 'I': 1.505, 'i': 1.698}
@@ -175,13 +176,27 @@ ax1.errorbar(magI[:, 0][magI[:, 3]==2] - u, magI[:, 1][magI[:, 3]==2] -1, yerr= 
 #ax1.scatter(limI[:, 4] - u, limI[:, 11]-1 , color='red',facecolors='none',label='_nolegend_',marker='v',s=18, lw=1.2)
 y=np.arange(16, 28,0.2)
 ax1.fill_betweenx(y,x1=93,x2=94, color='y',alpha=0.5,zorder=0)
+x=np.arange(0, 50,0.2)
+ax1.fill_between(x,y1=17.35,y2=17.5, color='r',alpha=0.5,zorder=0)
+
+ax1.annotate(r"$t_{{\rm rise},I}$", xy=(7, 17.35))
 ax1.axvline(x=0,color='k', linestyle='--',lw=0.8)
+x=np.arange(0, 19.9,0.2)
+ax1.fill_between(x,y1=18.6,y2=18.75, color='g',alpha=0.5,zorder=0)
+ax1.annotate(r"$t_{{\rm rise},V}$", xy=(7, 18.6))
+x=np.arange(0, 8.2,0.2)
+ax1.fill_between(x,y1=20.0,y2=20.2, color='b',alpha=0.5,zorder=0)
+ax1.annotate(r"$t_{{\rm rise},B}$", xy=(7, 20.0))
+
 ax1.set_xlim([-10, 150])
 ax1.set_ylim([17, 26])
 plt.gca().invert_yaxis()
 plt.tight_layout()
 plt.xlabel('MJD-57746.18 [days]')
 plt.ylabel('Apparent Magnitude')
+for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label] +
+             ax1.get_xticklabels() + ax1.get_yticklabels()):
+    item.set_fontsize(22)
 ax1.legend(loc='lower right',ncol=1, fancybox=True,fontsize=14, frameon=False)
 #ax1.spines[side].set_linewidth(size)
 ax1.yaxis.set_minor_locator(AutoMinorLocator(10))

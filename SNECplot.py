@@ -18,10 +18,10 @@ matplotlib.rcParams['ytick.minor.width'] = 1.5
 matplotlib.rcParams.update({'font.size': 21})
 matplotlib.rc('text', usetex=True)
 def SNECplot(filename,offset=0,verbosity=0):
-    files_path ='/home/afsari/gpc_SNEC/'
+    files_path = '/data/afsari/SNEC_Niagara/'
     os.chdir(files_path)
     #files_path ='/home/afsari/gpc_SNEC/'
-    files_path='/home/afsari/gpc_SNEC/'
+    files_path = '/data/afsari/SNEC_Niagara/'
     os.chdir(files_path)
     output_path=filename+'/output/magnitudes.dat'
     output_out = filename + '/output/magnitudes_output.dat'
@@ -43,9 +43,9 @@ def SNECplot(filename,offset=0,verbosity=0):
             line = line.strip('seconds\n')
             line = line.strip()
             t_BO = float(line)
-    t_BO=0
+    #t_BO=0
     mags[:,0]=mags[:,0]-t_BO
-    files_path ='/home/afsari/gpc_SNEC/'
+    files_path ='/data/afsari/SNEC_Niagara/'
     os.chdir(files_path)
     #filename1='s14.6_1020_K_9.00E+17'
     filename1='s18.8_1644_K_4.00E+17_mni0.1'
@@ -70,17 +70,17 @@ def SNECplot(filename,offset=0,verbosity=0):
             line = line.strip('seconds\n')
             line = line.strip()
             t_BO1 = float(line)
-    t_BO1=0
+    #t_BO1=0
     mags1[:,0]=mags1[:,0]-t_BO1
 
     ax=plt.subplot(211)
 
-    plt.plot(mags[:,0]-offset,mags[:,9],label=r'$B$ w/o CSM',color='blue',lw=2)
-    plt.plot(mags[:,0]-offset,mags[:,10],label=r'$V$ w/o CSM',color='green',lw=2)
-    plt.plot(mags[:,0]-offset,mags[:,12],label=r'$I$ w/o CSM',color='red',lw=2)
-    plt.plot(mags1[:,0]-offset,mags1[:,9],'--',label=r'$B$ w/ CSM',color='blue',lw=2)
-    plt.plot(mags1[:,0]-offset,mags1[:,10],'--',label=r'$V$ w/ CSM',color='green',lw=2)
-    plt.plot(mags1[:,0]-offset,mags1[:,12],'--',label=r'$I$ w/ CSM',color='red',lw=2)
+    plt.plot(mags[:,0]/84000.0-offset,mags[:,9],label=r'$B$ w/o CSM',color='blue',lw=2)
+    plt.plot(mags[:,0]/84000.0-offset,mags[:,10],label=r'$V$ w/o CSM',color='green',lw=2)
+    plt.plot(mags[:,0]/84000.0-offset,mags[:,12],label=r'$I$ w/o CSM',color='red',lw=2)
+    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,9],'--',label=r'$B$ w/ CSM',color='blue',lw=2)
+    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,10],'--',label=r'$V$ w/ CSM',color='green',lw=2)
+    plt.plot(mags1[:,0]/84000.0-offset,mags1[:,12],'--',label=r'$I$ w/ CSM',color='red',lw=2)
     # tck = interpolate.splrep(mags[:,0]/84000.0-offset,mags[:,9], s=0)
     # tt = np.arange(0, 118, 0.2)
     # magnew = interpolate.splev(tt, tck, der=0)
@@ -95,7 +95,7 @@ def SNECplot(filename,offset=0,verbosity=0):
     ax.xaxis.set_minor_locator(AutoMinorLocator(10))
     ax.xaxis.set_tick_params(width=1.5)
     ax.yaxis.set_tick_params(width=1.5)
-    #ax.set_xlim([0, 105])
+    ax.set_xlim([0, 140])
     ax.set_ylim([-18.5, -15])
     ax.invert_yaxis()
 
@@ -125,15 +125,15 @@ def SNECplot(filename,offset=0,verbosity=0):
     # for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label] +
     #                  ax1.get_xticklabels() + ax1.get_yticklabels()):
     #     item.set_fontsize(13)
-    #ax1.set_xlim([-1, 6])
-    ax1.set_ylim([-18, -10])
+    ax1.set_xlim([-0.5, 6])
+    ax1.set_ylim([-18, -15])
 
     plt.xlabel('Time [days]')
     ax1.invert_yaxis()
     ax1.set_ylabel('Absolute Magnitude', y=1)
     plt.tight_layout()
     plt.subplots_adjust(wspace=0, hspace=0.2)
-    ax1.legend(loc='lower right', ncol=3, fancybox=True, fontsize=12, frameon=False)
+    ax1.legend(loc='lower right', ncol=3, fancybox=True, fontsize=10, frameon=False)
     #ax1.set_ylabel('Absolute Magnitude', y=1)
     plt.show()
     return
@@ -756,4 +756,4 @@ if __name__ == "__main__":
         parser.add_argument("-f", "--offset", type=float, default=0)
         parser.add_argument("-v", "--verbosity", action="count", default=0)
         args = parser.parse_args()
-        SNEC_all(args.filename,offset=args.offset)
+        SNECplot(args.filename,offset=args.offset)
