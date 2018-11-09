@@ -109,15 +109,15 @@ def SNECplot(filename,offset=0,verbosity=0):
     # label = ax.set_ylabel('Absolute Magnitude')
     # ax1.yaxis.set_label_coords(0,0)
 
-    ax1.plot(mags[:,0]/84000.0-offset,mags[:,9],label=r'$B$ w/o CSM',color='blue',lw=1.5)
-    ax1.plot(mags[:,0]/84000.0-offset,mags[:,10],label=r'$V$ w/o CSM',color='green',lw=1.5)
-    ax1.plot(mags[:,0]/84000.0-offset,mags[:,12],label=r'$I$ w/o CSM',color='red',lw=1.5)
-    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,9],'--',label=r'$B$ w/CSM',color='blue',lw=1.5)
-    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,10],'--',label=r'$V$ w/ CSM',color='green',lw=1.5)
-    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,12],'--',label=r'$I$ w/ CSM',color='red',lw=1.5)
-    ax1.scatter(u_t,u,label=r'$B$ observed',marker='o',color='blue',s=50, facecolors='none', lw = 1.5)
-    ax1.scatter(v_t,v,label=r'$V$ observed',marker='o',color='green',s=50, facecolors='none', lw = 1.5)
-    ax1.scatter(i_t,i,label=r'$I$ observed',marker='o',color='red',s=50, facecolors='none', lw = 1.5)
+    ax1.plot(mags[:,0]/84000.0-offset,mags[:,9],label=r'$B$ w/o CSM',color='blue',lw=1.5,zorder=0.9)
+    ax1.plot(mags[:,0]/84000.0-offset,mags[:,10],label=r'$V$ w/o CSM',color='green',lw=1.5,zorder=0.9)
+    ax1.plot(mags[:,0]/84000.0-offset,mags[:,12],label=r'$I$ w/o CSM',color='red',lw=1.5,zorder=0.9)
+    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,9],'--',label=r'$B$ w/CSM',color='blue',lw=1.5,zorder=0.9)
+    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,10],'--',label=r'$V$ w/ CSM',color='green',lw=1.5,zorder=0.9)
+    ax1.plot(mags1[:,0]/84000.0-offset,mags1[:,12],'--',label=r'$I$ w/ CSM',color='red',lw=1.5,zorder=0.9)
+    ax1.scatter(u_t,u,label=r'$B$ observed',marker='o',color='blue',s=70, facecolors='none', lw = 1.5,zorder=1)
+    ax1.scatter(v_t,v,label=r'$V$ observed',marker='o',color='green',s=70, facecolors='none', lw = 1.5,zorder=1)
+    ax1.scatter(i_t,i,label=r'$I$ observed',marker='o',color='red',s=70, facecolors='none', lw = 1.5,zorder=1)
     ax1.yaxis.set_minor_locator(AutoMinorLocator(2))
     ax1.xaxis.set_minor_locator(AutoMinorLocator(10))
     ax1.xaxis.set_tick_params(width=1.5)
@@ -126,21 +126,21 @@ def SNECplot(filename,offset=0,verbosity=0):
     #                  ax1.get_xticklabels() + ax1.get_yticklabels()):
     #     item.set_fontsize(13)
     ax1.set_xlim([-0.5, 6])
-    ax1.set_ylim([-18, -15])
+    ax1.set_ylim([-18, -13])
 
-    plt.xlabel('Time [days]')
+    plt.xlabel('Time since first detection [days]')
     ax1.invert_yaxis()
     ax1.set_ylabel('Absolute Magnitude', y=1)
     plt.tight_layout()
     plt.subplots_adjust(wspace=0, hspace=0.2)
-    ax1.legend(loc='lower right', ncol=3, fancybox=True, fontsize=10, frameon=False)
+    ax1.legend(loc='lower right', ncol=3, fancybox=True, fontsize=10, frameon=False,columnspacing=0.2)
     #ax1.set_ylabel('Absolute Magnitude', y=1)
     plt.show()
     return
 
 def SNEC_all(filename,offset=0,verbosity=0):
     #files_path ='/home/afsari/gpc_SNEC/'
-    files_path='/home/afsari/gpc_SNEC/'
+    files_path ='/data/afsari/SNEC_Niagara/'
     os.chdir(files_path)
     output_path=filename+'/output/T_eff.dat'
     output_out = filename + '/output/T_eff_edit.dat'
@@ -163,8 +163,10 @@ def SNEC_all(filename,offset=0,verbosity=0):
             line = line.strip('seconds\n')
             line = line.strip()
             t_BO = float(line)
+    # print t_BO/84000.0
+    # t_BO=0
     temp[:,0]=temp[:,0]-t_BO
-    files_path = '/home/afsari/gpc_SNEC/'
+    files_path = '/data/afsari/SNEC_Niagara/'
     #files_path = '/home/afsari/gpc_SNEC/'
     os.chdir(files_path)
     #filename1='s14.6_1020_K_9.00E+17'
@@ -183,7 +185,7 @@ def SNEC_all(filename,offset=0,verbosity=0):
         temp1 = np.genfromtxt(output_out, delimiter=' ')
     except:
         print "error"
-    files_path = '/home/afsari/gpc_SNEC/'
+    files_path = '/data/afsari/SNEC_Niagara/'
     #files_path = '/home/afsari/gpc_SNEC/'
     os.chdir(files_path)
     #filename1='s14.6_1020_K_9.00E+17'
@@ -196,13 +198,17 @@ def SNEC_all(filename,offset=0,verbosity=0):
             line = line.strip('seconds\n')
             line = line.strip()
             t_BO1 = float(line)
+    # print t_BO1/84000.0
+    # t_BO1=0
     temp1[:,0]=temp1[:,0]-t_BO1
     plt.plot(temp[:,0]/84000.0-offset,temp[:,1]/1000.0,label=r'Model without CSM',color='blue',lw=2)
     plt.plot(temp1[:, 0] / 84000.0 - offset, temp1[:, 1]/1000.0,'--', label=r'Model with CSM', color='green', lw=2)
     files_path ='/home/afsari/PycharmProjects/kspSN'
     os.chdir(files_path)
-    temp_obs = np.genfromtxt("phot_csv/temperature.csv", delimiter=',')
-    plt.scatter(temp_obs[:,0],temp_obs[:,1]/1000.0,label='SED Temperature',marker='o',s=55, facecolors='none',color='red', linewidth='2')
+    os.chdir(files_path)
+    temp_obs = np.genfromtxt("phot_csv/temperature_data.csv", delimiter=',')
+    print temp_obs[:,1]
+    plt.errorbar(temp_obs[:,0]-358.0,temp_obs[:,1]/1000.0, temp_obs[:,2]/1000.0,label='SED Temperature',fmt='x',markersize=4,markerfacecolor=None, color='red', linewidth=2)
     ax.set_xlim([0, 105])
     ax.set_ylim([3, 18])
     ax.yaxis.set_minor_locator(AutoMinorLocator(2))
@@ -215,7 +221,8 @@ def SNEC_all(filename,offset=0,verbosity=0):
     ax.legend(loc='upper right', ncol=1, fancybox=True, fontsize=12)
     plt.ylabel(r'$\rm{T}[10^{3} \ \rm{K}]$')
     #files_path ='/home/afsari/gpc_SNEC/'
-    files_path='/home/afsari/gpc_SNEC/'
+    #files_path ='/home/afsari/gpc_SNEC/'
+    files_path = '/data/afsari/SNEC_Niagara/'
     os.chdir(files_path)
     output_path=filename+'/output/vel_photo.dat'
     output_out = filename + '/output/vel_photo_edit.dat'
@@ -230,8 +237,8 @@ def SNEC_all(filename,offset=0,verbosity=0):
     except:
         print "error"
     temp[:,0]=temp[:,0]-t_BO
-    ax=plt.subplot(313)
-    files_path = '/home/afsari/gpc_SNEC/'
+    ax1=plt.subplot(313)
+    files_path = '/data/afsari/SNEC_Niagara/'
     os.chdir(files_path)
     output_path=filename1+'/output/vel_photo.dat'
     output_out = filename1 + '/output/vel_photo_edit1.dat'
@@ -256,20 +263,20 @@ def SNEC_all(filename,offset=0,verbosity=0):
     plt.errorbar(93,3192.222867/1e3,yerr=  63.55/1e3,label='Fe II 5169', color='red', fmt='s')
 
 
-    ax.set_xlim([0, 105])
-    ax.set_ylim([0.2, 12.4])
-    ax.yaxis.set_minor_locator(AutoMinorLocator(2))
-    ax.xaxis.set_minor_locator(AutoMinorLocator(10))
-    ax.xaxis.set_tick_params(width=1.5)
-    ax.yaxis.set_tick_params(width=1.5)
-    ax.set_yticks(np.arange(2,12,4))
+    ax1.set_xlim([0, 105])
+    ax1.set_ylim([0.2, 12.4])
+    ax1.yaxis.set_minor_locator(AutoMinorLocator(2))
+    ax1.xaxis.set_minor_locator(AutoMinorLocator(10))
+    ax1.xaxis.set_tick_params(width=1.5)
+    ax1.yaxis.set_tick_params(width=1.5)
+    ax1.set_yticks(np.arange(2,12,4))
     plt.subplots_adjust(wspace=0, hspace=0)
     #plt.locator_params(axis='y', nbins=6)
-    ax.legend(loc='upper right', ncol=3, fancybox=True, fontsize=12)
+    ax1.legend(loc='upper right', ncol=3, fancybox=True, fontsize=12)
     plt.ylabel(r' $\rm{v}[10^{3} \ \rm{km}~\rm{s}^{-1}]$')
     plt.xlabel(r'Time [days]')
 
-    files_path='/home/afsari/gpc_SNEC/'
+    files_path = '/data/afsari/SNEC_Niagara/'
     os.chdir(files_path)
     output_path=filename+'/output/lum_observed.dat'
     output_out = filename + '/output/lum_observed_edit.dat'
@@ -284,9 +291,8 @@ def SNEC_all(filename,offset=0,verbosity=0):
     except:
         print "error"
     ax=plt.subplot(312)
-    t_BO=0
     temp[:,0]=temp[:,0]-t_BO
-    files_path = '/home/afsari/gpc_SNEC/'
+    files_path = '/data/afsari/SNEC_Niagara/'
     #files_path = '/home/afsari/gpc_SNEC/'
     os.chdir(files_path)
     #filename1='s14.6_1020_K_9.00E+17'
@@ -303,15 +309,15 @@ def SNEC_all(filename,offset=0,verbosity=0):
         temp1 = np.genfromtxt(output_out, delimiter=' ')
     except:
         print "error"
-    t_BO1=0
+    print "tbo1",t_BO1
     temp1[:,0]=temp1[:,0]-t_BO1
-    plt.plot(temp[:,0]-offset,np.log10(temp[:,1]),label='Model without CSM',color='blue',lw=2)
-    plt.plot(temp1[:, 0]  - offset, np.log10(temp1[:, 1]), '--',label='Model with CSM', color='green', lw=2)
+    plt.plot(temp[:,0]/84000.0-offset,np.log10(temp[:,1]),label='Model without CSM',color='blue',lw=2)
+    plt.plot(temp1[:, 0]/84000.0  - offset, np.log10(temp1[:, 1]), '--',label='Model with CSM', color='green', lw=2)
     temp_obs = np.genfromtxt("/home/afsari/PycharmProjects/kspSN/phot_csv/Lbol.csv", delimiter=' ')
     print temp_obs
-    plt.scatter(temp_obs[:,0],np.log10(temp_obs[:,1]),label='Observation',marker='o',s=55, facecolors='none',color='red', linewidth='2')
-    # ax.set_xlim([0, 105])
-    # ax.set_ylim([40, 43.7])
+    plt.scatter(temp_obs[:,0],np.log10(temp_obs[:,1]),label='Observation',marker='o',s=55, facecolors='none',color='red', linewidth=2)
+    ax.set_xlim([0, 105])
+    ax.set_ylim([40, 43.7])
     ax.legend(loc='lower right', ncol=1, fancybox=True, fontsize=12)
     plt.ylabel(r'$\log \rm{L}[\rm{erg}~ \rm{s}^{-1}]$')
     #plt.xlabel('Time [days]')

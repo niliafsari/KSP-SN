@@ -109,14 +109,14 @@ for i,sn_name in enumerate(file_names):
 
 label=ax1.set_ylabel('B-V')
 label=ax2.set_ylabel('V-i/I')
-ax2.yaxis.set_label_coords(-0.09, 0.5)
+ax2.yaxis.set_label_coords(-0.13, 0.5)
 #ax1.grid()
 # plt.yticks([0,1,2])
-ax1.set_xlim([-15, 150])
-ax1.set_ylim([-0.4, 2])
+ax1.set_xlim([0, 7])
+ax1.set_ylim([-0.4,  0.7])
 
-ax2.set_xlim([-15, 150])
-ax2.set_ylim([-0.7, 1.3])
+ax2.set_xlim([0, 7])
+ax2.set_ylim([-0.5, 0.5])
 
 ax1.yaxis.set_minor_locator(AutoMinorLocator(10))
 ax1.xaxis.set_minor_locator(AutoMinorLocator(10))

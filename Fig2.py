@@ -144,7 +144,7 @@ magI=mag
 
 
 
-u = np.min(magB[:, 0])-0.68
+u = np.min(magB[:, 0])-0.12
 print u
 ax1.errorbar(magB[:, 0][magB[:, 3]==0] - u, magB[:, 1][magB[:, 3]==0] +1, yerr= magB[:, 2][magB[:, 3]==0] , color='blue', label='B+1',fmt='o',markersize=6,markeredgecolor='black',
              markeredgewidth=1.2)
@@ -176,23 +176,28 @@ ax1.errorbar(magI[:, 0][magI[:, 3]==2] - u, magI[:, 1][magI[:, 3]==2] -1, yerr= 
 #ax1.scatter(limI[:, 4] - u, limI[:, 11]-1 , color='red',facecolors='none',label='_nolegend_',marker='v',s=18, lw=1.2)
 y=np.arange(16, 28,0.2)
 ax1.fill_betweenx(y,x1=93,x2=94, color='y',alpha=0.5,zorder=0)
-x=np.arange(0, 50,0.2)
-ax1.fill_between(x,y1=17.35,y2=17.5, color='r',alpha=0.5,zorder=0)
+#x=np.arange(0, 50,0.2)
+#ax1.fill_between(x,y1=17.35,y2=17.5, color='r',alpha=0.5,zorder=0)
 
-ax1.annotate(r"$t_{{\rm rise},I}$", xy=(7, 17.35))
+#ax1.annotate(r"$t_{{\rm rise},I}$", xy=(7, 17.35))
 ax1.axvline(x=0,color='k', linestyle='--',lw=0.8)
-x=np.arange(0, 19.9,0.2)
-ax1.fill_between(x,y1=18.6,y2=18.75, color='g',alpha=0.5,zorder=0)
-ax1.annotate(r"$t_{{\rm rise},V}$", xy=(7, 18.6))
-x=np.arange(0, 8.2,0.2)
-ax1.fill_between(x,y1=20.0,y2=20.2, color='b',alpha=0.5,zorder=0)
-ax1.annotate(r"$t_{{\rm rise},B}$", xy=(7, 20.0))
+#x=np.arange(0, 19.9,0.2)
+# ax1.fill_between(x,y1=18.6,y2=18.75, color='g',alpha=0.5,zorder=0)
+# ax1.annotate(r"$t_{{\rm rise},V}$", xy=(7, 18.6))
+ax1.annotate(r"$t_{{\rm rise},I}$", xy=(50, 17.8), xytext=(50, 18.8),
+            arrowprops=dict(facecolor='gray', shrink=0.001,width=1,headwidth=4,alpha=1,headlength=7),fontsize=15)
+ax1.annotate(r"$t_{{\rm rise},V}$", xy=(19.9, 19.1), xytext=(19.9, 20.1),
+            arrowprops=dict(facecolor='gray', shrink=0.001,width=1,headwidth=4,alpha=1,headlength=7),fontsize=15)
+#ax1.fill_between(x,y1=20.0,y2=20.2, color='b',alpha=0.5,zorder=0
+ax1.annotate(r"$t_{{\rm rise},B}$", xy=(8.2, 20.2), xytext=(8.2, 21.2),
+            arrowprops=dict(facecolor='gray', shrink=0.001,width=1,headwidth=4,alpha=1,headlength=7),fontsize=15 )
+#ax1.annotate(r"$t_{{\rm rise},B}$", xy=(7, 20.0))
 
 ax1.set_xlim([-10, 150])
 ax1.set_ylim([17, 26])
 plt.gca().invert_yaxis()
 plt.tight_layout()
-plt.xlabel('MJD-57746.18 [days]')
+plt.xlabel('MJD-57746.74 [days]')
 plt.ylabel('Apparent Magnitude')
 for item in ([ax1.title, ax1.xaxis.label, ax1.yaxis.label] +
              ax1.get_xticklabels() + ax1.get_yticklabels()):

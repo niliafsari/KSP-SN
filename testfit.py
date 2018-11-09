@@ -19,10 +19,12 @@ sys.path.insert(0, '/home/afsari/')
 from SNAP2.Analysis import *
 
 
+temp_obs = np.genfromtxt("phot_csv/temperature_data.csv", delimiter=',')
+print temp_obs
 
-absmag=Cosmology.absMag(17,0.0231)
-print absmag
-#
+# absmag=Cosmology.absMag(17,0.0231)
+# print absmag
+# #
 # sn_name="KSPN2188"
 # magB = np.load("phot_csv/compiledSN_" + "B" + "_" + sn_name + ".npy")
 # magB = magB.astype(np.float)

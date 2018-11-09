@@ -32,10 +32,10 @@ matplotlib.rcParams['xtick.minor.width'] = 1.5
 # coef = {'B': 3.626, 'V': 2.742, 'I': 1.505, 'i': 1.698}
 # coef = {'B': 4.315, 'V': 3.315, 'I': 1.940, 'i': 2.086}
 spec_SN = np.genfromtxt('/home/afsari/snandhostgalaxyspectrum/spectrum.text', delimiter=' ')
-SN1999em= np.genfromtxt('SN1999em_94.txt', delimiter=',')
-SN2009ib= np.genfromtxt('SN2009ib_103.txt', delimiter=',')
-SN2013fs= np.genfromtxt('SN2013fs_81.txt', delimiter=',')
-SN2012aw= np.genfromtxt('SN2012aw_91.txt', delimiter=',')
+SN1999em= np.genfromtxt('phot_csv/SN1999em_94.txt', delimiter=',')
+SN2009ib= np.genfromtxt('phot_csv/SN2009ib_103.txt', delimiter=',')
+SN2013fs= np.genfromtxt('phot_csv/SN2013fs_81.txt', delimiter=',')
+SN2012aw= np.genfromtxt('phot_csv/SN2012aw_91.txt', delimiter=',')
 #spec_Nova= np.genfromtxt(current_path+'/KSP-N300-2017iv.flm', delimiter='  ')
 
 #plt.rc('text', usetex=True)
@@ -93,11 +93,11 @@ ax.text(7050,5300, 'SN2009ib (+103)', fontsize=14,multialignment='center',va='ce
 #ax.text(9000,1.9, 'SN2013fs (+81)', fontsize=13,multialignment='center',va='center')
 ax.text(7050,8500, 'SN2012aw (+91)', fontsize=14,multialignment='center',va='center')
 ax.yaxis.set_ticklabels([])
-my_file = open('lines.csv', 'r')
+my_file = open('phot_csv/lines.csv', 'r')
 reader = csv.reader(my_file, delimiter=' ')
 my_list = list(reader)
 my_file.close()
-lines= np.genfromtxt ('lines.csv', delimiter=" ")
+lines= np.genfromtxt ('phot_csv/lines.csv', delimiter=" ")
 print my_list[0]
 #mydict1 = {rows[0]:rows[1] for rows in my_list}
 y=np.arange(-5000, 10000,0.2)
@@ -109,7 +109,7 @@ for l in my_list:
 # ax.text( 5500, -0.07, 'KSP-N300-2017iv (Nova)', fontsize=16,multialignment='center',va='center')
 ax.xaxis.set_ticklabels([])
 ax2 = plt.subplot(212)
-host= np.genfromtxt('host_spectrum.csv', delimiter=' ')
+host= np.genfromtxt('phot_csv/host_spectrum.csv', delimiter=' ')
 ax2.plot(host[:,0],host[:,1]/np.nanmax(host[:,1]),color='black',label='Host Galaxy')
 print host[:,0]
 ax2.yaxis.set_minor_locator(AutoMinorLocator(5))
@@ -122,7 +122,7 @@ plt.xticks(np.arange(3500, 8900, 1000))
 ax2.xaxis.set_ticklabels(np.arange(3500, 8900, 1000))
 ax2.set_xlim([3500, 8900])
 ax2.text( 7000, 0.8, 'Host Galaxy', fontsize=17,multialignment='center',va='center')
-my_file = open('host_lines.csv', 'r')
+my_file = open('phot_csv/host_lines.csv', 'r')
 reader = csv.reader(my_file, delimiter=' ')
 my_list = list(reader)
 my_file.close()

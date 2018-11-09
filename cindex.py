@@ -82,11 +82,11 @@ for index,j in enumerate(v_t):
         vi_e=np.concatenate((vi_e,np.sqrt(np.square(i_e[sub].reshape((1,1)))+np.square(v_e[index].reshape((1,1))))))
 
 #vi=np.a[vi_t vi]
-bv=np.concatenate((bv_t, bv, bv_e),axis=1)
-vi=np.concatenate((vi_t, vi,vi_e),axis=1)
+# bv=np.concatenate((bv_t, bv, bv_e),axis=1)
+# vi=np.concatenate((vi_t, vi,vi_e),axis=1)
 #
-np.save('phot_csv/vi.npy',vi)
-np.save('phot_csv/bv.npy',bv)
+# np.save('phot_csv/vi.npy',vi)
+# np.save('phot_csv/bv.npy',bv)
 
 cindex_t = np.zeros(shape=(0, 1))
 cindex_vi = np.zeros(shape=(0, 1))
@@ -96,6 +96,7 @@ for index,j in enumerate(vi_t):
     if np.min(np.abs(bv_t-j))<=0.1:
         sub = np.argmin(np.abs(bv_t - j))
         cindex_t=np.concatenate((cindex_t,bv_t[sub].reshape((1,1))))
+        print cindex_vi.shape,bv
         cindex_vi=np.concatenate((cindex_vi,bv[sub].reshape((1,1))))
         cindex_bv=np.concatenate((cindex_bv,vi[index].reshape((1,1))))
 
@@ -104,30 +105,39 @@ ax=plt.subplot(111)
 
 temp=np.genfromtxt("phot_csv/temperature.csv", delimiter=',')
 temp_filter=np.genfromtxt("phot_csv/temps_filter.csv", delimiter=',')
-BB_fluxB=np.genfromtxt("phot_csv/BB_fluxB_nofil.csv", delimiter=',')
-BB_fluxV=np.genfromtxt("phot_csv/BB_fluxV_nofil.csv", delimiter=',')
-BB_fluxI=np.genfromtxt("phot_csv/BB_fluxI_nofil.csv", delimiter=',')
+# BB_fluxB=np.genfromtxt("phot_csv/BB_fluxB_nofil.csv", delimiter=',')
+# BB_fluxV=np.genfromtxt("phot_csv/BB_fluxV_nofil.csv", delimiter=',')
+# BB_fluxI=np.genfromtxt("phot_csv/BB_fluxI_nofil.csv", delimiter=',')
+BB_magB=np.genfromtxt("phot_csv/BB_magB_Johnson.B.csv", delimiter=' ')
+BB_magV=np.genfromtxt("phot_csv/BB_magV_Johnson.V.csv", delimiter=' ')
+BB_magI=np.genfromtxt("phot_csv/BB_magI_Johnson.I.csv", delimiter=' ')
 flux_0 = [ 4023, 3562, 2814]
+
 # BB_magB=-2.512*np.log10(BB_fluxB/flux_0[0])
 # BB_magV=-2.512*np.log10(BB_fluxV/flux_0[1])
 # BB_magI=-2.512*np.log10(BB_fluxI/flux_0[2])
 
-BB_bv=-2.512*np.log10(BB_fluxB/BB_fluxV)
-BB_vi=-2.512*np.log10(BB_fluxV/BB_fluxI)
+# BB_bv=-2.5*np.log10(BB_fluxB/BB_fluxV)
+# BB_vi=-2.5*np.log10(BB_fluxV/BB_fluxI)
 
+BB_bv=BB_magB-BB_magV
+BB_vi=BB_magV-BB_magI
+temp_filter=np.linspace(4000,15000,1000)
 from scipy.interpolate import UnivariateSpline
 fit_temp = UnivariateSpline(temp[:,0] - temp[0,0], temp[:,1])
 cindex_temp=fit_temp(cindex_t)
 #plt.scatter(cindex_vi,cindex_bv, c=cindex_temp, cmap='jet')
-plt.scatter(cindex_vi,cindex_bv, c=cindex_temp, cmap='jet_r',label='Observed')
-plt.clim(4000, 15000)
-plt.scatter(BB_vi,BB_bv, c=temp_filter, marker='s', cmap='jet_r',label='Blackbody')
-plt.clim(4000, 15000)
+plt.scatter(cindex_vi,cindex_bv, c=cindex_t, cmap='jet_r',label='Observed')
+cbar=plt.colorbar()
+#plt.clim(4000, 15000)
+# cbar=plt.colorbar()
+plt.scatter(BB_vi,BB_bv, c='m', marker='s',s=5, cmap='jet_r',label='Blackbody')
+#plt.clim(4000, 15000)
 plt.xlabel('V-I')
 plt.ylabel('B-V')
-cbar=plt.colorbar()
-cbar.set_label('Temperature [k]', rotation=270)
-#cbar.set_label('Time [day]', rotation=270)
+
+#cbar.set_label('Temperature [10^3 K]', rotation=270)
+cbar.set_label('Time [day]', rotation=270)
 ax.legend(loc='upper left', fancybox=True,fontsize=12)
 plt.show()
 
