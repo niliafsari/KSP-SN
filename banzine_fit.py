@@ -31,9 +31,13 @@ matplotlib.rc('text', usetex=True)
 def func(t, t0, a, n):
     return a*((t-t0)**n)
 
-def func(t, t0, tfall,trise, A,B):
+def benzine(t, tfall,trise, A,B):
+    t0=0
     return A*(np.exp(-(t-t0)/tfall)/(np.exp((t-t0)/trise)+1))+B
 
+t=np.linspace(0.5,55,10)
+p=[  9.97527891e-03 , -1.58440654e+01 ,  3.07510967e-01 ,  7.68485856e-01]
+print benzine(t,p[0],p[1],p[2],p[3])
 # sn_name="KSPN2188_v1"
 # magB = np.load("/home/afsari/PycharmProjects/kspSN/phot_csv/compiledSN_B_KSPN2188_v1.npy")
 # magV = np.load("/home/afsari/PycharmProjects/kspSN/phot_csv/compiledSN_" + "V" + "_" + sn_name + ".npy")
@@ -47,9 +51,9 @@ magI = np.genfromtxt(current_path+'/phot_csv/N2188-I_v12_edit.csv', delimiter=',
 
 coef = {0: 4.315, 1: 4.315, 2: 3.315, 3: 1.940, 4: 2.086}
 coef = {1: 3.626, 2: 2.742, 3: 1.505, 4: 1.698}
-magB[:,4]=magB[:,4]-3.58867256944e+02-0.12
-magV[:,4]=magV[:,4]-3.58867256944e+02-0.12
-magI[:,4]=magI[:,4]-3.58867256944e+02-0.12
+magB[:,4]=magB[:,4]-3.58867256944e+02+0.12
+magV[:,4]=magV[:,4]-3.58867256944e+02+0.12
+magI[:,4]=magI[:,4]-3.58867256944e+02+0.12
 
 # t1=-1
 # t2=4
@@ -86,49 +90,41 @@ Flim = Mlim
 for i in range(len(F)):
     F[i] = deredFlux(F[i], EBVgal, coef[int(band[i])])
     F_err[i] = deredFlux(F_err[i], EBVgal, coef[int(band[i])])
-    #need to correct for K correction
-    # kcorr, mask = s.model.kcorr(band[i],t[i]-s.Tmax)
-    # kcorr_val = kcorr[mask]
-    # kcorr_inval = np.zeros(len(kcorr[np.invert(mask)]))
-    # kcorr = np.concatenate([kcorr_inval, kcorr_val], axis=0)
     F[i], F_err[i] = absFlux(F[i]*10.0**-6, z, appFlux_err=F_err[i]*10.0**-6, z_err=zerr)
     F[i], F_err[i] = F[i]*10**6, F_err[i]*10**6
     Flim[i] = Mag_toFlux(band_rev[int(band[i])], absMag(deredMag(Mlim[i], EBVgal,coef[int(band[i])]), z))*10**6 #in uJy
-    #peak abs fluxes
     maxes[i] = Mag_toFlux(band_rev[int(band[i])],maxes[i])*10**6 #in uJy
-    #get Max centered dilated time
-    #t[i] = absTime(t[i]-s.Tmax, z)
-#
+
 print "Converting early LC to rest frame normalized luminosity"
 #scale luminosity as fraction of max lum
 L_err = [l/maxes[i] for i, l in enumerate(F_err)]
 L = [l/maxes[i] for i, l in enumerate(F)]
 Llim = [l/maxes[i] for i, l in enumerate(Flim)]
-#
-# print "plotting early data"
-# #plot
 
-#
-# print "Fitting power law to section of early light curve"
-# # #for each band crop to right section
-f = 55#fit up to 40% of maximum flux (Olling 2015)
+
+f = 0.5#fit up to 40% of maximum flux (Olling 2015)
+
+L_err = [lerr[t[i]>=f] for i, lerr in enumerate(L_err)]
+L = [l[t[i]>=f] for i,l in enumerate(L)]
+Llim=[l[t[i]>=f] for i,l in enumerate(Llim)]
+t = [time[time>=f] for time in t]
+
+
+f = 80#fit up to 40% of maximum flux (Olling 2015)
 
 L_err = [lerr[t[i]<f] for i, lerr in enumerate(L_err)]
 L = [l[t[i]<f] for i,l in enumerate(L)]
 Llim=[l[t[i]<f] for i,l in enumerate(Llim)]
 t = [time[time<f] for time in t]
 
-f = 0#fit up to 40% of maximum flux (Olling 2015)
+f = 35#fit up to 40% of maximum flux (Olling 2015)
 
-L_err = [lerr[t[i]>f] for i, lerr in enumerate(L_err)]
-L = [l[t[i]>f] for i,l in enumerate(L)]
-Llim=[l[t[i]>f] for i,l in enumerate(Llim)]
-t = [time[time>f] for time in t]
+L_err[0:2] = [lerr[t[i]<f] for i, lerr in enumerate(L_err[0:2])]
+L[0:2] = [l[t[i]<f] for i,l in enumerate(L[0:2])]
+Llim[0:2]=[l[t[i]<f] for i,l in enumerate(Llim[0:2])]
+t[0:2] = [time[time<f] for time in t[0:2]]
 
-# tc=t
-# Llimc=Llim
-# LL=L
-# #fit up to 40% of maximum flux (Olling 2015)
+
 t = [time[(L[i]>Llim[i]) ] for i, time in enumerate(t)]
 L_err = [ lerr[(L[i]>Llim[i])] for i, lerr in enumerate(L_err)]
 L = [l[(l>Llim[i])] for i,l in enumerate(L)]
@@ -170,30 +166,86 @@ for i,l in enumerate(t):
 
 #for each band, perturb flux by flux errors
 n = 10000 #number of perturbations
-randomdataY = [L]
+#randomdataY = [L]
 
 #L_err=[np.ones(shape=l.shape)*0.05 for l in L_err]
-p0 = [-0.5, 0.14790311668495584, 0.13297572161885188, 0.075625766346250234, 1.5252380308464539]
+# L_pert = []
+# for j in range(n):
+#     L_pert.append(L[0] + np.random.normal(0., L_err[0]/1.0, len(L[0])))
+
+# randomdataY = L[0]
+# print randomdataY, L_err[0].shape
+randomdataY=[[L[0]]]
+L_err=[np.ones(shape=l.shape)*0.1 for l in L_err]
 for j in range(n):
-    print str(j+1)+"/"+str(n)
     L_pert = []
-    for i in range(len(t)):
+    for i in [0]:
         L_pert.append(L[i] + np.random.normal(0., L_err[i]/1.0, len(L[i])))
     randomdataY.append(L_pert)
+p0 = [10, 5, 1, 0.1]
 print "Fitting bootstrap using 4 processes"
-x, err_x = fit_bootstrap(p0, t, randomdataY, L_err, earlyMultiErr, errfunc=True, perturb=False, n=3000, nproc=4)
+x, err_x = fit_bootstrap(p0, t[0], randomdataY, L_err[0], benzineErr, errfunc=True, perturb=False, n=3000, nproc=4)
 print "Fitting bootstrap using better initial parameters"
-x, err_x = fit_bootstrap(x, t, randomdataY, L_err, earlyMultiErr, errfunc=True, perturb=False, n=3000, nproc=4)
-#
-# #interpret results
-# t0, t0_err = x[0], err_x[0]
-# C = [x[1],x[2],x[3]]
-# C_err = [err_x[1],err_x[2],err_x[3]]
-# a = [x[4],x[4],x[4]]
-# a_err = [err_x[4],err_x[4],err_x[4]]
-# x2dof = np.sqrt(np.square(earlyMultiErr(x, t, L, L_err)).sum())/(len(L[0])+len(L[1])+len(L[2])-len(x))
-#
-#
+x_B, err_x_B = fit_bootstrap(x, t[0],randomdataY, L_err[0], benzineErr, errfunc=True, perturb=False, n=3000, nproc=4)
+print x_B
+randomdataY=[[L[1]]]
+for j in range(n):
+    L_pert = []
+    for i in [1]:
+        L_pert.append(L[i] + np.random.normal(0., L_err[i]/1.0, len(L[i])))
+    randomdataY.append(L_pert)
+
+print "Fitting bootstrap using 4 processes"
+x, err_x = fit_bootstrap(x_B, t[1], randomdataY, L_err[1], benzineErr, errfunc=True, perturb=False, n=3000, nproc=4)
+print "Fitting bootstrap using better initial parameters"
+x_V, err_x_V = fit_bootstrap(x, t[1], randomdataY, L_err[1], benzineErr, errfunc=True, perturb=False, n=3000, nproc=4)
+print x_V
+
+
+randomdataY=[[L[2]]]
+for j in range(n):
+    L_pert = []
+    for i in [2]:
+        L_pert.append(L[i] + np.random.normal(0., L_err[i]/1.0, len(L[i])))
+    randomdataY.append(L_pert)
+
+
+print "Fitting bootstrap using 4 processes"
+x, err_x = fit_bootstrap(x_V, t[2], randomdataY, L_err[2], benzineErr, errfunc=True, perturb=False, n=3000, nproc=4)
+print "Fitting bootstrap using better initial parameters"
+x_I, err_x_I = fit_bootstrap(x, t[2], randomdataY, L_err[2], benzineErr, errfunc=True, perturb=False, n=3000, nproc=4)
+
+tBaz_B=x_B[1]*np.log(-x_B[1]/(x_B[0]+x_B[1]))
+tBaz_V=x_V[1]*np.log(-x_V[1]/(x_V[0]+x_V[1]))
+tBaz_I=x_I[1]*np.log(-x_I[1]/(x_I[0]+x_I[1]))
+
+def max_ben(trise,tfall,t0):
+    return t0+trise*np.log(-trise/(trise+tfall))
+
+print 0.07**2
+print ((err_x_B[1]**2)*((np.log(-x_B[1]/(x_B[0]+x_B[1]))+(1-(x_B[1]/(x_B[0]+x_B[1]))))**2)),(err_x_B[1]**2),((np.log(-x_B[1]/(x_B[0]+x_B[1]))+(1-(x_B[1]/(x_B[0]+x_B[1]))))**2)
+print ((err_x_B[0]**2)*(x_B[1]/(x_B[0]+x_B[1]))**2),(err_x_B[0]**2),(x_B[1]/(x_B[0]+x_B[1]))**2
+
+print err_x_B
+trise_B_pert=x_B[1] + np.random.normal(0.,err_x_B[1]/1.0,100000)
+tfall_B_pert=x_B[0] + np.random.normal(0.,err_x_B[0]/1.0,100000)
+tpeak=max_ben(trise_B_pert,tfall_B_pert,0)
+tpeak=tpeak[~np.isnan(tpeak)]
+print np.nanmedian(tpeak), np.nanstd(tpeak)
+
+trise_B_pert=x_V[1] + np.random.normal(0.,err_x_V[1]/1.0,100000)
+tfall_B_pert=x_V[0] + np.random.normal(0.,err_x_V[0]/1.0,100000)
+tpeak=max_ben(trise_B_pert,tfall_B_pert,0)
+print np.nanmedian(tpeak), np.nanstd(tpeak)
+
+trise_B_pert=x_I[1] + np.random.normal(0.,err_x_I[1]/1.0,100000)
+tfall_B_pert=x_I[0] + np.random.normal(0.,err_x_I[0]/1.0,100000)
+tpeak=max_ben(trise_B_pert,tfall_B_pert,0)
+print np.nanmedian(tpeak), np.nanstd(tpeak)
+
+tBaz_B_err=np.sqrt(0.07**2+((err_x_B[1]**2)*((np.log(-x_B[1]/(x_B[0]+x_B[1]))+(1-(x_B[1]/(np.abs(x_B[0])+x_B[1]))))**2))+((err_x_B[0]**2)*(x_B[1]/(np.abs(x_B[0])+x_B[1]))**2))
+print "tBaz_B",tBaz_B,"tBaz_V",tBaz_V,"tBaz_I",tBaz_I, tBaz_B_err
+
 # #output data
 # print ""
 # print "Epoch of first light in rest frame:", t0, t0_err
@@ -209,16 +261,31 @@ x, err_x = fit_bootstrap(x, t, randomdataY, L_err, earlyMultiErr, errfunc=True, 
 # ax.set_xlabel("Time from first detection [days]", fontsize = 20)
 # ax.set_ylabel("Normalized Flux", fontsize = 20)
 # #best fit curves
-# tT = np.linspace(t[0][0]-10, t[0][-1]+10, 1000)
+tT = np.linspace(0, 80, 1000)
 # LT = [earlyFit(tT,t0,C[0],a[0]),earlyFit(tT,t0,C[1],a[1]),earlyFit(tT,t0,C[2],a[2])]
 # t1_early=-4
 # t2_early=5.5
 # #plot fit
 #
 #     #plot fluxes
-# ax.errorbar(t[0],L[0],L_err[0]*1.6,fmt='b+',label=r'$B$')
-# ax.plot(tT, LT[0], 'b-')
-# ax.scatter(tc[0][tc[0]<0], Llimc[0][tc[0]<0], c='b', marker='v',s=9, alpha=0.6)
+ax=plt.subplot(111)
+ax.errorbar(t[0],L[0],L_err[0],fmt='b+',label=r'$B$')
+ax.plot(tT, benzine(tT,x_B[0],x_B[1],x_B[2],x_B[3]), 'b-')
+ax.errorbar(t[1],L[1],L_err[1],fmt='g+',label=r'$V$')
+ax.plot(tT, benzine(tT,x_V[0],x_V[1],x_V[2],x_V[3]), 'g-')
+ax.errorbar(t[2],L[2],L_err[2],fmt='r+',label=r'$V$')
+tT = np.linspace(0, 80, 1000)
+ax.plot(tT, benzine(tT,x_I[0],x_I[1],x_I[2],x_I[3]), 'r-')
+ax.set_xlabel("Time since SBO [days]", fontsize = 14)
+ax.set_ylabel("Normalized Flux", fontsize = 14)
+plt.tight_layout()
+ax.yaxis.set_minor_locator(AutoMinorLocator(2))
+ax.xaxis.set_minor_locator(AutoMinorLocator(10))
+ax.xaxis.set_tick_params(width=1.5)
+ax.yaxis.set_tick_params(width=1.5)
+plt.legend(loc='best')
+plt.show()
+#ax.scatter(tc[0][tc[0]<0], Llimc[0][tc[0]<0], c='b', marker='v',s=9, alpha=0.6)
 #
 # ax.errorbar(t[1],L[1],L_err[1]*1.6,fmt='g+',label=r'$V$')
 # ax.plot(tT, LT[1], 'g-')
@@ -309,5 +376,5 @@ x, err_x = fit_bootstrap(x, t, randomdataY, L_err, earlyMultiErr, errfunc=True, 
 
 
 #plt.axis([-1,t2+1,0,100])
-# plt.legend()
+#
 # plt.show()

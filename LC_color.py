@@ -41,7 +41,7 @@ files_count=len(file_names)
 
 ax1 = plt.subplot(211)
 ax2 = plt.subplot(212)
-dict1={'SN1999em':0,'ASASSN-14dq':56841,'SN1987A':46849,'SN2014cx':56900,'SN2013fs':56422,'KSPN2188_v1':358.1, 'SN2012aw':56002,'SN2005cs':53548}
+dict1={'SN1999em':51475.87,'SN1987A':46849,'SN2014cx':56901.89,'SN2013fs':56422,'KSPN2188_v1':358.867-0.12, 'SN2012aw':56002,'SN2005cs':53548.5}
 for i,sn_name in enumerate(file_names):
     print sn_name
     if sn_name!='KSPN2188_v1':
@@ -112,11 +112,11 @@ label=ax2.set_ylabel('V-i/I')
 ax2.yaxis.set_label_coords(-0.13, 0.5)
 #ax1.grid()
 # plt.yticks([0,1,2])
-ax1.set_xlim([0, 7])
-ax1.set_ylim([-0.4,  0.7])
+ax1.set_xlim([0, 100])
+ax1.set_ylim([-0.4,  2])
 
-ax2.set_xlim([0, 7])
-ax2.set_ylim([-0.5, 0.5])
+ax2.set_xlim([0, 100])
+ax2.set_ylim([-0.5, 2])
 
 ax1.yaxis.set_minor_locator(AutoMinorLocator(10))
 ax1.xaxis.set_minor_locator(AutoMinorLocator(10))

@@ -81,6 +81,11 @@ def SNECplot(filename,offset=0,verbosity=0):
     plt.plot(mags1[:,0]/84000.0-offset,mags1[:,9],'--',label=r'$B$ w/ CSM',color='blue',lw=2)
     plt.plot(mags1[:,0]/84000.0-offset,mags1[:,10],'--',label=r'$V$ w/ CSM',color='green',lw=2)
     plt.plot(mags1[:,0]/84000.0-offset,mags1[:,12],'--',label=r'$I$ w/ CSM',color='red',lw=2)
+    add=np.concatenate((mags[0:,0:1]/84000.0-offset,mags[0:,9:10]-mags[:,10:11],mags[0:,10:11]-mags[0:,12:13]),axis=1)
+    add1=np.concatenate((mags1[0:, 0:1]/ 84000.0 - offset, mags1[0:, 9:10] - mags1[0:, 10:11], mags1[0:, 10:11] - mags1[0:, 12:13]),axis=1)
+    print add1.shape
+    np.save('/home/afsari/PycharmProjects/kspSN/phot_csv/model.npy',add)
+    np.save('/home/afsari/PycharmProjects/kspSN/phot_csv/model_csm.npy',add1)
     # tck = interpolate.splrep(mags[:,0]/84000.0-offset,mags[:,9], s=0)
     # tt = np.arange(0, 118, 0.2)
     # magnew = interpolate.splev(tt, tck, der=0)
